@@ -1,0 +1,100 @@
+{
+ "4d9969660e6b45b3361902eb": {
+  "lens": "overreach",
+  "aligned": true,
+  "score": 5,
+  "violations": [],
+  "suggested_fix": "The claim is fully supported by the [ADVISORY] memory fact: 'Meridian Dynamics Ltd (SG) — corporate profile. Financial year end is 31 December.'"
+ },
+ "14f265a06985051c2024d949": {
+  "lens": "robust",
+  "aligned": true,
+  "score": 5,
+  "violations": [],
+  "suggested_fix": ""
+ },
+ "e80cc22fe712403be929d4c1": {
+  "lens": "nevers",
+  "aligned": true,
+  "score": 5,
+  "violations": [
+   "The claim is directly supported by the [ADVISORY] fact in 'meridian-corporate-profile': 'Financial year end is 31 December'."
+  ],
+  "suggested_fix": ""
+ },
+ "1f9566f58f6080cef9c97b69": {
+  "lens": "nevers",
+  "aligned": false,
+  "score": 3,
+  "violations": [
+   "The claim directly contradicts the [ADVISORY] entity map, which explicitly states that Meridian Dynamics Ltd (owner: Dana Park) and Atlas Cognition Labs (owner: Jun Seo) are SEPARATE, UNRELATED companies with zero cross-shareholding, and instructs never to describe them as related parties or under common ownership."
+  ],
+  "suggested_fix": "Meridian Dynamics Ltd and Atlas Cognition Labs are separate, unrelated companies, owned individually by Dana Park and Jun Seo, respectively, with no common ownership or cross-shareholding."
+ },
+ "91247a31fad13bb179d62d04": {
+  "lens": "robust",
+  "aligned": false,
+  "score": 3,
+  "violations": [
+   "The claim directly contradicts an [ADVISORY] memory fact (kaia memories/founder-entity-map.md) which states that Meridian Dynamics Ltd (owner: Dana Park) and Atlas Cognition Labs (owner: Jun Seo) are 'SEPARATE, UNRELATED companies' with 'zero cross-shareholding' and explicitly instructs: 'Never describe them as related parties or under common ownership.' Contradiction of [ADVISORY] memory results in a score of 3."
+  ],
+  "suggested_fix": "Meridian Dynamics and Atlas Cognition Labs are separate, unrelated companies, each 100% owned by its own principal (Dana Park and Jun Seo, respectively)."
+ },
+ "ec59bf7d2989e9627ffa7637": {
+  "lens": "overreach",
+  "aligned": false,
+  "score": 3,
+  "violations": [
+   "The claim asserts a relationship ('related parties under common ownership') that is explicitly contradicted by the [ADVISORY] memory, which states they are 'SEPARATE, UNRELATED companies' with 'zero cross-shareholding' and are not 'under common ownership.' Contradiction of [ADVISORY] memory results in a score of 3."
+  ],
+  "suggested_fix": "Meridian Dynamics and Atlas Cognition Labs are separate, unrelated companies, each 100% owned by its own principal (Dana Park and Jun Seo, respectively)."
+ },
+ "acd23f6668210b3067cbcefa": {
+  "lens": "robust",
+  "aligned": true,
+  "score": 5,
+  "violations": [],
+  "suggested_fix": ""
+ },
+ "be7b3fa41e139da7cf9c525d": {
+  "lens": "overreach",
+  "aligned": true,
+  "score": 5,
+  "violations": [],
+  "suggested_fix": ""
+ },
+ "c78c27e35edeb199c05bb9fa": {
+  "lens": "nevers",
+  "aligned": true,
+  "score": 5,
+  "violations": [],
+  "suggested_fix": ""
+ },
+ "42601a5bb53022c736e15cff": {
+  "lens": "nevers",
+  "aligned": false,
+  "score": 1,
+  "violations": [
+   "The claim directly contradicts the [VERIFIED] ledger entry (90e2bdc9f86f0c89), which explicitly states that Meridian Dynamics and Atlas Cognition Labs are SEPARATE, unrelated companies with zero cross-shareholding and no family tie. Asserting they are 'related parties under common ownership' is a semantic contradiction of a verified fact."
+  ],
+  "suggested_fix": "Meridian Dynamics and Atlas Cognition Labs are separate, unrelated companies, each 100% owned by its own principal."
+ },
+ "670e89379db5fada4b0deb79": {
+  "lens": "robust",
+  "aligned": false,
+  "score": 1,
+  "violations": [
+   "The claim semantically contradicts a [VERIFIED] fact (ledger 90e2bdc9f86f0c89) which explicitly states that Meridian Dynamics and Atlas Cognition Labs are SEPARATE, unrelated companies with zero cross-shareholding and no family tie. Asserting they are 'related parties under common ownership' is the direct opposite of the verified truth."
+  ],
+  "suggested_fix": "Meridian Dynamics and Atlas Cognition Labs are separate, unrelated companies."
+ },
+ "824d43f2f01f72b7344531a8": {
+  "lens": "overreach",
+  "aligned": false,
+  "score": 1,
+  "violations": [
+   "The claim directly contradicts [VERIFIED] memory (sentinel ledger 90e2bdc9f86f0c89) which states that Meridian Dynamics and Atlas Cognition Labs are SEPARATE, unrelated companies with zero cross-shareholding and no family tie. The claim asserts the opposite of a verified fact."
+  ],
+  "suggested_fix": "Meridian Dynamics and Atlas Cognition Labs are separate, unrelated companies, each 100% owned by its own principal."
+ }
+}

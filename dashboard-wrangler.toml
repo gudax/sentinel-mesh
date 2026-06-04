@@ -1,0 +1,5 @@
+name = "sentinel-mesh"
+compatibility_date = "2026-06-01"
+routes = [{ pattern = "sentinel.k.nexus", custom_domain = true }]
+[assets]
+directory = "./dashboard"

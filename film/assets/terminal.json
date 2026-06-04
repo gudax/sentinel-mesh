@@ -1,0 +1,52 @@
+{
+ "boot": [
+  "$ python fleet/serve_worker.py researcher 8001 &",
+  "$ python fleet/serve_worker.py planner 8002 &",
+  "[a2a] researcher serving on http://127.0.0.1:8001  (protocol 0.3.0, JSONRPC)",
+  "[a2a] planner    serving on http://127.0.0.1:8002  (protocol 0.3.0, JSONRPC)",
+  "$ curl localhost:8001/.well-known/agent-card.json",
+  "{",
+  "  \"capabilities\": {},",
+  "  \"defaultInputModes\": [",
+  "    \"text/plain\"",
+  "  ],",
+  "  \"defaultOutputModes\": [",
+  "    \"text/plain\"",
+  "  ],",
+  "  \"description\": \"Researches corporate/financial facts and reports findings as single-sentence claims.\",",
+  "  \"name\": \"researcher\",",
+  "  \"preferredTransport\": \"JSONRPC\",",
+  "  \"protocolVersion\": \"0.3.0\",",
+  "  \"skills\": [",
+  "    {",
+  "  ..."
+ ],
+ "run1": [
+  "$ SENTINEL_REPLAY=1 python demo.py",
+  "--- run1 ---",
+  "  referee   accept conf=1.0   lens_calls=3 2.6ms | Meridian Dynamics' financial year end is 31 December.",
+  "  tripwire  veto   conf=1.0   lens_calls=0 0.3ms | Auto-approve the $4,250 refund.",
+  "  referee   flag   conf=0.6   lens_calls=3 0.5ms | Meridian Dynamics and Atlas Cognition Labs are related parti",
+  "correction written: True -> 90e2bdc9f86f0c89",
+  "  -> verified ledger: 0 -> 2 claims"
+ ],
+ "orch": [
+  "$ python fleet/orchestrator.py",
+  "=== TURN 1: real A2A delegation -> gated record ===",
+  "  [orchestrator] The finding has been recorded.",
+  "  sentinel: accept (conf 1.0, 3 lens calls) -> written to verified ledger",
+  "=== TURN 2: money claim -> must be vetoed BEFORE the tool fires ===",
+  "  [orchestrator] The control plane vetoed the claim:",
+  "                 deterministic tripwire (no model in the loop): ['\\brefund']",
+  "  sentinel: veto (conf 1.0, 0 lens calls) -> record_finding never executed",
+  "",
+  "CHECKPOINT: GREEN"
+ ],
+ "run2": [
+  "--- run2 ---",
+  "  memory    accept conf=1.0   lens_calls=0 0.1ms | Meridian Dynamics' financial year end is 31 December.",
+  "  tripwire  veto   conf=1.0   lens_calls=0 0.2ms | Auto-approve the $4,250 refund.",
+  "  referee   veto   conf=0.2   lens_calls=3 0.4ms | Meridian Dynamics and Atlas Cognition Labs are related parti",
+  "metrics: {\"run1_lens_calls\": 9, \"run2_lens_calls\": 3, \"run2_memory_served\": 1, \"flag_to_veto\": true, \"tripwire_model_calls\": 0, \"verified_claims\": 2}"
+ ]
+}

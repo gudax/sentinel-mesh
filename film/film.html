@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sentinel Mesh — demo reel</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--band:#0a0a0a;--card:#111;--text:#ededed;--body:#a1a1a1;--mute:#666;
+    --hairline:rgba(255,255,255,.08);--accept:#0070f3;--veto:#ff4d4d;--flag:#f5a623;
+    --cyan:#00dfd8;--pink:#ff0080;--violet:#7928ca;--amber:#f9cb28;--blue:#007cf0;
+    --sans:"Geist",system-ui,sans-serif;--mono:"Geist Mono",ui-monospace,monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px;overflow:hidden;background:#000;color:var(--text);
+    font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .scene{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;background:var(--band)}
+  .scene.on{opacity:1}
+  #preroll{position:absolute;inset:0;background:#000;z-index:99;opacity:1;transition:opacity .4s}
+  #preroll.off{opacity:0;pointer-events:none}
+
+  /* S1 + S6 title cards */
+  /* NOTE: no `position` here — .titlecard rules come after .scene, so a
+     position:relative would silently override .scene's absolute (live-earned). */
+  .titlecard{display:flex;flex-direction:column;justify-content:center;padding:0 180px;overflow:hidden}
+  .titlecard::before{content:"";position:absolute;inset:-30% -10% auto;height:120%;opacity:.34;pointer-events:none;
+    background:radial-gradient(38% 55% at 12% 25%,var(--blue) 0%,transparent 70%),
+      radial-gradient(30% 50% at 38% 10%,var(--cyan) 0%,transparent 70%),
+      radial-gradient(32% 55% at 64% 22%,var(--violet) 0%,transparent 72%),
+      radial-gradient(26% 45% at 84% 8%,var(--pink) 0%,transparent 70%),
+      radial-gradient(20% 40% at 97% 28%,var(--amber) 0%,transparent 72%);
+    filter:blur(48px) saturate(1.1)}
+  .eyebrow{font-family:var(--mono);font-size:20px;letter-spacing:.1em;color:var(--body);
+    display:flex;align-items:center;gap:18px;position:relative}
+  .eyebrow .dot{width:10px;height:10px;border-radius:99px;background:var(--cyan);box-shadow:0 0 22px var(--cyan)}
+  .titlecard h1{font-size:108px;line-height:1.04;font-weight:600;letter-spacing:-5px;margin-top:30px;position:relative}
+  .titlecard h1 .thin{color:var(--mute)}
+  .titlecard .sub{font-size:30px;line-height:1.5;color:var(--body);margin-top:28px;max-width:1250px;position:relative}
+  .titlecard .sub b{color:var(--text);font-weight:500}
+  .badge{position:absolute;top:64px;right:80px;font-family:var(--mono);font-size:17px;color:var(--body);
+    border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:8px 22px;z-index:2}
+  .urls{margin-top:54px;font-family:var(--mono);font-size:22px;line-height:2;color:var(--body);position:relative}
+  .urls b{color:var(--cyan);font-weight:400}
+
+  /* terminal scenes */
+  .termscene{display:flex;flex-direction:column;padding:70px 110px;gap:28px}
+  .scenetitle{font-family:var(--mono);font-size:19px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase}
+  .scenetitle b{color:var(--cyan);font-weight:500}
+  .term{flex:1;background:#0d0d0d;border:1px solid var(--hairline);border-radius:12px;
+    padding:36px 44px;font-family:var(--mono);font-size:21.5px;line-height:1.62;overflow:hidden;
+    box-shadow:0 2px 2px #00000060,0 24px 48px -12px #000}
+  .term .ln{white-space:pre-wrap;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s;color:#c8c8c8}
+  .term .ln.show{opacity:1;transform:none}
+  .term .ln.cmd{color:var(--text);font-weight:500}
+  .term .ln.ok{color:#7ee2c8}
+  .term .ln.veto{color:var(--veto)}
+  .term .ln.flag{color:var(--flag)}
+  .term .ln.dim{color:#777}
+
+  /* dashboard scenes */
+  .dashscene{padding:0}
+  .dashwrap{position:absolute;inset:0;overflow:hidden}
+  .dashwrap iframe{width:1920px;height:2100px;border:0;transform-origin:top left;
+    transition:transform 2.2s cubic-bezier(.4,0,.2,1)}
+  .lowerthird{position:absolute;left:90px;bottom:80px;background:rgba(10,10,10,.92);
+    border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:26px 38px;max-width:900px;
+    backdrop-filter:blur(8px);opacity:0;transform:translateY(12px);transition:all .7s}
+  .lowerthird.show{opacity:1;transform:none}
+  .lowerthird .k{font-family:var(--mono);font-size:16px;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase}
+  .lowerthird .v{font-size:27px;font-weight:600;letter-spacing:-.5px;margin-top:8px}
+  .lowerthird .v .f{color:var(--flag)} .lowerthird .v .r{color:var(--veto)} .lowerthird .v .c{color:var(--cyan)}
+</style>
+</head>
+<body>
+  <div id="preroll"></div>
+
+  <section class="scene titlecard" id="s1">
+    <span class="badge">RECORDED RUN · fixture replay · Gemini on Vertex AI</span>
+    <div class="eyebrow"><span class="dot"></span>GOOGLE FOR STARTUPS · AI AGENTS CHALLENGE 2026</div>
+    <h1>Sentinel Mesh<br><span class="thin">Verified memory for agent fleets.</span></h1>
+    <p class="sub">Every agent memory today is <b>gullible</b> — it stores whatever an agent says.
+      Sentinel Mesh puts an <b>adversarial referee in the A2A message path</b>:
+      verify in flight, remember what survives, get smarter every run.</p>
+  </section>
+
+  <section class="scene termscene" id="s2">
+    <div class="scenetitle"><b>01</b> · real google stack — ADK workers · live A2A agent cards · Gemini referee</div>
+    <div class="term" id="t-boot"></div>
+  </section>
+
+  <section class="scene termscene" id="s3a">
+    <div class="scenetitle"><b>02</b> · run 1 — cold memory · accept / hard-veto / flag</div>
+    <div class="term" id="t-run1"></div>
+  </section>
+
+  <section class="scene dashscene" id="s3b">
+    <div class="dashwrap"><iframe id="if1" src="/dashboard/index.html" scrolling="no"></iframe></div>
+    <div class="lowerthird" id="lt1"><div class="k">Run 1 · cold memory</div>
+      <div class="v">1 accept · 1 <span class="r">hard veto</span> (no model) · 1 <span class="f">flag</span> → gated correction → ledger 0 → 2</div></div>
+  </section>
+
+  <section class="scene dashscene" id="s4">
+    <div class="dashwrap"><iframe id="if2" src="/dashboard/index.html" scrolling="no"></iframe></div>
+    <div class="lowerthird" id="lt2"><div class="k">Run 2 · warm memory · nothing changed but memory</div>
+      <div class="v">memory-served: <span class="c">0 calls / 0.5 ms</span> · the lie: <span class="f">FLAG</span> → <span class="r">VETO</span> · lens calls 9 → 3</div></div>
+  </section>
+
+  <section class="scene termscene" id="s5">
+    <div class="scenetitle"><b>03</b> · the seam — ADK before_tool_callback · veto fires before the tool</div>
+    <div class="term" id="t-orch"></div>
+  </section>
+
+  <section class="scene titlecard" id="s6">
+    <div class="eyebrow"><span class="dot"></span>SENTINEL MESH</div>
+    <h1 style="font-size:84px;letter-spacing:-4px">Verify in the message path.<br>
+      <span class="thin">Remember what survives.</span><br>Get smarter every run.</h1>
+    <div class="urls">
+      <div>dashboard · <b>sentinel.k.nexus</b></div>
+      <div>code · <b>github.com/gudax/sentinel-mesh</b></div>
+      <div style="color:var(--mute);font-size:18px;margin-top:14px">recorded run · measured counters · Nexus AI Labs Inc. · Seoul</div>
+    </div>
+  </section>
+
+<script>
+const $ = s => document.querySelector(s);
+
+function lineClass(raw){
+  return "ln" +
+    (raw.trim().startsWith("$") ? " cmd" :
+     /veto/i.test(raw) ? " veto" :
+     /flag/i.test(raw) ? " flag" :
+     /accept|GREEN|recorded|verified ledger/i.test(raw) ? " ok" :
+     /^\s*["{}\[]|\.\.\./.test(raw) ? " dim" : "");
+}
+
+function show(id){ document.querySelectorAll(".scene").forEach(s => s.classList.remove("on")); $(id).classList.add("on"); }
+
+// Absolute-deadline scheduler: every action carries a wall-clock deadline relative
+// to t0; a 120 ms tick fires everything due. Even if the browser throttles timers
+// (occluded window), a late tick fires the whole backlog at once — the timeline
+// self-corrects to <=1 s drift instead of stretching (live-earned on take 1).
+async function startFilm(){
+  const [T, A] = await Promise.all([
+    fetch("/film/vo/timings.json").then(r => r.json()),
+    fetch("/film/assets/terminal.json").then(r => r.json()),
+  ]);
+  const len = i => T.durations[i] + T.pad;           // scene i length, seconds
+  const S = T.starts;                                 // scene start times
+  const cam = (ifr, scale, x, y) => { $(ifr).style.transform = `scale(${scale}) translate(${x}px, ${y}px)`; };
+  const acts = [];
+  const at = (t, fn) => acts.push({t, fn, done: false});
+  const typeAt = (t0s, termSel, lines, span) => {
+    const term = $(termSel); term.innerHTML = "";
+    lines.forEach((raw, j) => {
+      const d = document.createElement("div");
+      d.className = lineClass(raw); d.textContent = raw || " ";
+      term.appendChild(d);
+      at(t0s + (j * span) / lines.length, () => d.classList.add("show"));
+    });
+  };
+
+  at(0, () => { $("#preroll").classList.add("off"); show("#s1"); });
+  at(S[1], () => show("#s2"));            typeAt(S[1] + .4, "#t-boot", A.boot, len(1) * .75);
+  at(S[2], () => show("#s3a"));           typeAt(S[2] + .4, "#t-run1", A.run1, len(2) * .45);
+  at(S[2] + len(2) * .55, () => { show("#s3b"); cam("#if1", 1.18, -40, -360); });
+  at(S[2] + len(2) * .55 + .9, () => $("#lt1").classList.add("show"));
+  at(S[3], () => { show("#s4"); cam("#if2", 1.18, -700, -360); });
+  at(S[3] + 1.2, () => $("#lt2").classList.add("show"));
+  at(S[3] + len(3) * .62, () => cam("#if2", 1.32, -60, -150));
+  at(S[4], () => show("#s5"));            typeAt(S[4] + .4, "#t-orch", A.orch, len(4) * .75);
+  at(S[5], () => show("#s6"));
+  at(T.total + 1.2, () => { document.title = "FILM-DONE"; });
+
+  const t0 = performance.now();
+  const tick = setInterval(() => {
+    const el = (performance.now() - t0) / 1000;
+    for (const a of acts) if (!a.done && a.t <= el) { a.done = true; a.fn(); }
+    if (acts.every(a => a.done)) clearInterval(tick);
+  }, 120);
+}
+
+if (new URLSearchParams(location.search).get("go")) {
+  document.fonts.ready.then(() => setTimeout(startFilm, 600));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+fixtures/raw/
+sentinel.db
+.playwright-mcp/
+demo_data/demo_memory.db
+dashboard/runs.json
+film/vo/*.wav
+film/vo/*.pcm
+film/*.mp4
+film/*.webm
