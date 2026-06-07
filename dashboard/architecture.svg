@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" font-family="Menlo, 'IBM Plex Mono', monospace">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#221e16"/></marker>
+    <marker id="arrC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#1f4e79"/></marker>
+  </defs>
+
+  <!-- paper -->
+  <rect width="1400" height="860" fill="#f6f2e9"/>
+  <!-- ledger red margin -->
+  <line x1="42" y1="0" x2="42" y2="860" stroke="#bf3b2d" stroke-width="1.4" opacity=".5"/>
+  <line x1="47" y1="0" x2="47" y2="860" stroke="#bf3b2d" stroke-width="1.4" opacity=".5"/>
+
+  <!-- document header -->
+  <text x="70" y="52" font-size="21" font-weight="bold" letter-spacing="3" fill="#221e16">SENTINEL MESH</text>
+  <text x="298" y="52" font-size="17" fill="#6b6354" font-family="Georgia, serif" font-style="italic">— Verified-Memory Control Plane for A2A Agent Fleets</text>
+  <text x="1330" y="40" font-size="11" fill="#6b6354" text-anchor="end">WORKING PAPERS · FORM SM-1</text>
+  <text x="1330" y="56" font-size="11" fill="#6b6354" text-anchor="end">ARCHITECTURE OF RECORD</text>
+  <line x1="70" y1="66" x2="1330" y2="66" stroke="#221e16" stroke-width="2.5"/>
+  <text x="70" y="86" font-size="12" fill="#6b6354" font-family="Georgia, serif" font-style="italic">the referee guards memory · memory grounds the referee · the fleet compounds truth every run</text>
+  <line x1="70" y1="98" x2="1330" y2="98" stroke="#b9ad92" stroke-width="1"/>
+
+  <!-- ── fleet column ── -->
+  <text x="70" y="132" font-size="11" letter-spacing="2.5" fill="#221e16" font-weight="bold">I. THE FLEET</text>
+  <rect x="70" y="146" width="280" height="74" fill="#efe9da" stroke="#221e16" stroke-width="1.6"/>
+  <text x="90" y="176" font-size="14" fill="#221e16" font-weight="bold">Worker A · researcher</text>
+  <text x="90" y="198" font-size="11" fill="#6b6354">ADK LlmAgent · A2A :8001 · AgentCard</text>
+
+  <rect x="70" y="238" width="280" height="74" fill="#efe9da" stroke="#221e16" stroke-width="1.6"/>
+  <text x="90" y="268" font-size="14" fill="#221e16" font-weight="bold">Worker B · planner</text>
+  <text x="90" y="290" font-size="11" fill="#6b6354">ADK LlmAgent · A2A :8002 · AgentCard</text>
+
+  <rect x="70" y="350" width="280" height="86" fill="#efe9da" stroke="#221e16" stroke-width="1.6"/>
+  <text x="90" y="380" font-size="14" fill="#221e16" font-weight="bold">Orchestrator</text>
+  <text x="90" y="402" font-size="11" fill="#6b6354">ADK Agent · RemoteA2aAgent tools</text>
+  <text x="90" y="420" font-size="11" fill="#6b6354">delegates over real A2A (JSONRPC)</text>
+
+  <path d="M210 220 V238" fill="none" stroke="#221e16" stroke-width="1.3" marker-end="url(#arr)"/>
+  <path d="M210 312 V350" fill="none" stroke="#221e16" stroke-width="1.3" marker-end="url(#arr)"/>
+  <text x="222" y="338" font-size="10.5" fill="#6b6354">A2A protocol</text>
+
+  <!-- claim flows right -->
+  <path d="M350 393 H470" fill="none" stroke="#221e16" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+  <text x="360" y="383" font-size="11" fill="#221e16" font-family="Georgia, serif" font-style="italic">every claim, in the message path</text>
+
+  <!-- ── control plane ── -->
+  <text x="470" y="132" font-size="11" letter-spacing="2.5" fill="#221e16" font-weight="bold">II. SENTINEL CONTROL PLANE</text>
+  <rect x="470" y="146" width="420" height="424" fill="none" stroke="#221e16" stroke-width="2.4"/>
+  <rect x="475" y="151" width="410" height="414" fill="none" stroke="#221e16" stroke-width=".8"/>
+
+  <text x="496" y="186" font-size="15" fill="#221e16" font-weight="bold">intercept()</text>
+  <text x="496" y="206" font-size="11" fill="#6b6354">ADK before_tool_callback · non-experimental seam</text>
+  <text x="496" y="224" font-size="11" fill="#6b6354">memory-first fast path: verified claim → 0 model calls</text>
+  <line x1="496" y1="240" x2="864" y2="240" stroke="#b9ad92" stroke-width="1"/>
+
+  <text x="496" y="268" font-size="13.5" fill="#221e16" font-weight="bold">3-lens Gemini referee</text>
+  <text x="496" y="288" font-size="11" fill="#6b6354">robust · overreach · nevers — parallel, hostile</text>
+  <text x="496" y="306" font-size="11" fill="#6b6354">gemini-flash on Vertex AI · JSON verdicts · temp 0</text>
+  <text x="496" y="332" font-size="13.5" fill="#bf3b2d" font-weight="bold">+ deterministic tripwire</text>
+  <text x="496" y="352" font-size="11" fill="#6b6354">money / auth / destructive → veto, no model in the loop</text>
+  <line x1="496" y1="370" x2="864" y2="370" stroke="#b9ad92" stroke-width="1"/>
+
+  <!-- verdict stamps -->
+  <text x="496" y="398" font-size="11" letter-spacing="2" fill="#221e16" font-weight="bold">VERDICT</text>
+  <g transform="translate(496,412) rotate(-2)">
+    <rect width="64" height="26" fill="none" stroke="#b3261e" stroke-width="2"/>
+    <rect x="3" y="3" width="58" height="20" fill="none" stroke="#b3261e" stroke-width="1"/>
+    <text x="32" y="18" font-size="11" font-weight="bold" letter-spacing="2" fill="#b3261e" text-anchor="middle">VETO</text></g>
+  <text x="572" y="429" font-size="10.5" fill="#6b6354">any lens ≤ 2 or tripwire — claim dropped, tool never fires</text>
+  <g transform="translate(496,452) rotate(-2)">
+    <rect width="64" height="26" fill="none" stroke="#996000" stroke-width="2"/>
+    <rect x="3" y="3" width="58" height="20" fill="none" stroke="#996000" stroke-width="1"/>
+    <text x="32" y="18" font-size="11" font-weight="bold" letter-spacing="2" fill="#996000" text-anchor="middle">FLAG</text></g>
+  <text x="572" y="469" font-size="10.5" fill="#6b6354">min = 3 — advisory contradiction is suspicion, never certainty</text>
+  <g transform="translate(496,492) rotate(-2)">
+    <rect width="78" height="26" fill="none" stroke="#1e6b40" stroke-width="2"/>
+    <rect x="3" y="3" width="72" height="20" fill="none" stroke="#1e6b40" stroke-width="1"/>
+    <text x="39" y="18" font-size="11" font-weight="bold" letter-spacing="2" fill="#1e6b40" text-anchor="middle">ACCEPT</text></g>
+  <text x="586" y="509" font-size="10.5" fill="#6b6354">all ≥ 4 — written back as VERIFIED, with provenance</text>
+  <text x="496" y="546" font-size="11" fill="#221e16" font-family="Georgia, serif" font-style="italic">independently examined: 30-claim eval set · ADK eval + deterministic harness · see eval/</text>
+
+  <!-- ── memory column ── -->
+  <text x="1010" y="132" font-size="11" letter-spacing="2.5" fill="#1f4e79" font-weight="bold">III. MEMORY — TWO LAYERS, SEPARATE FILES</text>
+  <rect x="1010" y="146" width="320" height="170" fill="#efe9da" stroke="#1f4e79" stroke-width="1.6"/>
+  <text x="1030" y="176" font-size="13.5" fill="#1f4e79" font-weight="bold">advisory memory (read-only)</text>
+  <text x="1030" y="198" font-size="11" fill="#6b6354">SQLite `memories` contract · mode=ro</text>
+  <text x="1030" y="216" font-size="11" fill="#6b6354">prod: operator's kaia broker</text>
+  <text x="1030" y="234" font-size="11" fill="#6b6354">demo: seeded fictional store</text>
+  <text x="1030" y="252" font-size="11" fill="#6b6354">snippet retrieval centered on the</text>
+  <text x="1030" y="270" font-size="11" fill="#6b6354">densest term cluster</text>
+  <text x="1030" y="296" font-size="10.5" fill="#1f4e79">contradiction scores exactly 3 → FLAG</text>
+
+  <rect x="1010" y="346" width="320" height="170" fill="#efe9da" stroke="#1f4e79" stroke-width="1.6"/>
+  <line x1="1016" y1="352" x2="1324" y2="352" stroke="#1f4e79" stroke-width=".7"/>
+  <text x="1030" y="378" font-size="13.5" fill="#1f4e79" font-weight="bold">verified ledger (write-back)</text>
+  <text x="1030" y="400" font-size="11" fill="#6b6354">sentinel.db · its own file — broker</text>
+  <text x="1030" y="418" font-size="11" fill="#6b6354">refresh jobs can never clobber rulings</text>
+  <text x="1030" y="436" font-size="11" fill="#6b6354">claim_hash · confidence · dissent</text>
+  <text x="1030" y="454" font-size="11" fill="#6b6354">evidence_ref · ruling chain (trace-to-origin)</text>
+  <text x="1030" y="480" font-size="10.5" fill="#b3261e">contradiction scores 1–2 → VETO</text>
+  <text x="1030" y="498" font-size="10.5" fill="#1f4e79">verified claims served at 0 model calls</text>
+
+  <!-- connectors plane <-> memory -->
+  <path d="M890 250 H1010" fill="none" stroke="#1f4e79" stroke-width="1.4" stroke-dasharray="2 4" marker-start="url(#arrC)"/>
+  <text x="906" y="240" font-size="10.5" fill="#1f4e79">ground truth</text>
+  <path d="M890 430 H1010" fill="none" stroke="#1f4e79" stroke-width="1.6" marker-end="url(#arrC)"/>
+  <text x="906" y="420" font-size="10.5" fill="#1f4e79">accept → write-back</text>
+
+  <!-- closed loop return -->
+  <path d="M1170 516 V600 H210 V436" fill="none" stroke="#221e16" stroke-width="1.4" stroke-dasharray="7 5" marker-end="url(#arr)"/>
+  <text x="700" y="590" font-size="12.5" fill="#221e16" text-anchor="middle" font-family="Georgia, serif" font-style="italic">run N+1 reads strictly cleaner memory — verified claims served at 0 model calls; a run-1 FLAG becomes a run-2 VETO</text>
+
+  <!-- footer: measured -->
+  <line x1="70" y1="676" x2="1330" y2="676" stroke="#221e16" stroke-width="2.5"/>
+  <text x="70" y="702" font-size="11" letter-spacing="2.5" fill="#221e16" font-weight="bold">MEASURED, NOT ASSERTED — RECORDED RUN + INDEPENDENT EXAMINATION</text>
+  <text x="70" y="728" font-size="12" fill="#6b6354">Gemini lens calls 9 → 3 · memory-served claim: 0 calls / 0.5 ms (vs 3 calls / 3.7 s) · the lie: FLAG(0.6) → VETO(0.2) · money claim blocked pre-model · verified claims 0 → 2</text>
+  <text x="70" y="752" font-size="12" fill="#6b6354" id="evalline">referee eval: 30 claims × 3 runs — accuracy, consistency and veto precision/recall published in eval/results.json · run offline: SENTINEL_REPLAY=1 python eval/run_eval.py</text>
+
+  <line x1="70" y1="788" x2="1330" y2="788" stroke="#b9ad92" stroke-width="1"/>
+  <text x="70" y="812" font-size="11" fill="#998f7c">google ADK · A2A protocol · gemini on Vertex AI · provenance memory</text>
+  <text x="1330" y="812" font-size="11" fill="#998f7c" text-anchor="end">NEXUS AI LABS · sentinel.k.nexus</text>
+</svg>
