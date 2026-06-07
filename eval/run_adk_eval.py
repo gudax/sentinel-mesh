@@ -11,6 +11,8 @@ This is Google's own eval machinery (EvalSet -> AgentEvaluator) scoring:
   - response_match_score >= 0.8     : the final answer must be the verdict word
 """
 import asyncio
+import datetime
+import json
 import os
 import pathlib
 import sys
@@ -23,14 +25,35 @@ os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
 
 from google.adk.evaluation.agent_evaluator import AgentEvaluator  # noqa: E402
 
+ARTIFACT = EVAL_DIR / "adk_results.json"  # committed proof, not just a stdout line
+
 
 async def main(num_runs):
-    await AgentEvaluator.evaluate(
-        agent_module="referee_agent",
-        eval_dataset_file_path_or_dir=str(EVAL_DIR / "referee.test.json"),
-        num_runs=num_runs,
-    )
-    print("ADK EVAL: GREEN (AgentEvaluator raises on criterion failure)")
+    started = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    try:
+        await AgentEvaluator.evaluate(
+            agent_module="referee_agent",
+            eval_dataset_file_path_or_dir=str(EVAL_DIR / "referee.test.json"),
+            num_runs=num_runs,
+        )
+        status = "GREEN"
+    except Exception as e:  # noqa: BLE001 — record the failure, then re-raise
+        ARTIFACT.write_text(json.dumps({
+            "status": "RED", "error": f"{type(e).__name__}: {e}",
+            "num_runs": num_runs, "started_at": started,
+        }, indent=1))
+        raise
+    ARTIFACT.write_text(json.dumps({
+        "status": status,
+        "harness": "google.adk.evaluation.AgentEvaluator",
+        "eval_set": "referee.test.json",
+        "criteria": {"tool_trajectory_avg_score": 1.0, "response_match_score": 0.8},
+        "num_runs": num_runs,
+        "started_at": started,
+        "finished_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "note": "AgentEvaluator raises on criterion failure; GREEN = no raise.",
+    }, indent=1))
+    print(f"ADK EVAL: {status} (artifact: {ARTIFACT})")
 
 
 if __name__ == "__main__":

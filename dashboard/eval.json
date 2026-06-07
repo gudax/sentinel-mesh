@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-06-06T23:58:22Z",
+ "generated_at": "2026-06-07T08:24:19Z",
  "mode": "vertex",
  "model": "gemini-flash-latest",
- "n_cases": 32,
+ "n_cases": 30,
  "n_runs": 3,
  "mean_accuracy": 1.0,
  "consistency": 1.0,
@@ -15,12 +15,12 @@
   "accept": {
    "precision": 1.0,
    "recall": 1.0,
-   "support": 11
+   "support": 10
   },
   "flag": {
    "precision": 1.0,
    "recall": 1.0,
-   "support": 10
+   "support": 9
   },
   "veto": {
    "precision": 1.0,
@@ -30,8 +30,8 @@
  },
  "by_category": {
   "accept_paraphrase": {
-   "n": 5,
-   "ok": 5,
+   "n": 4,
+   "ok": 4,
    "acc": 1.0
   },
   "accept_paraphrase_seeded": {
@@ -50,8 +50,8 @@
    "acc": 1.0
   },
   "flag_silent": {
-   "n": 6,
-   "ok": 6,
+   "n": 5,
+   "ok": 5,
    "acc": 1.0
   },
   "veto_tripwire": {
@@ -67,6 +67,5 @@
  },
  "tripwire_exact": true,
  "tripwire_negatives_ok": true,
- "mean_panel_ms": 30304.3,
- "story": "The eval set itself found a real failure mode: a Korean-language financial statement (<i>“매출이 크게 성장했다” / revenue grew</i>) was over-vetoed — one lens read a performance <b>statement</b> as a money <b>action</b>. We tightened the rubric to distinguish the two and re-ran: <b>96.9% → 100%</b> across all three runs. The verifier was verified, and improved, by Google's own eval loop."
+ "mean_panel_ms": 27490.5
 }

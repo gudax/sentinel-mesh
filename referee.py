@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Sentinel Mesh referee — adversarial 3-lens Gemini panel grounded in memory.
 
-Judge core vendored from persona-orchestrator/runner.py (judge_panel / _judge_one /
-_extract_json / ESCALATE_PATTERNS), with two deliberate swaps:
-  1. model_call: `claude -p` subprocess -> sync google-genai gemini-flash-latest JSON call.
-  2. the injected "constitution" -> a memory_facts snapshot (kaia ground-truth + the
-     sentinel verified-claim ledger), so the panel judges claims against what the
+Judge core vendored from our production adversarial-decision engine (judge_panel /
+_judge_one / _extract_json / ESCALATE_PATTERNS), with two deliberate swaps:
+  1. model_call: the engine's CLI-model subprocess -> sync google-genai gemini-flash-latest JSON call.
+  2. the injected "constitution" -> a memory_facts snapshot (the advisory broker's
+     ground-truth + the sentinel verified-claim ledger), so the panel judges claims against what the
      fleet actually knows, not against a static rulebook.
 
 Verdict rubric (the closed-loop hinge, encoded in the lens prompts so Run-1 FLAG ->
@@ -65,7 +65,7 @@ LENSES = [
                "hard violations (score 1-2). [ADVISORY] contradictions score exactly 3."),
 ]
 
-# --- vendored verbatim from persona-orchestrator/runner.py (§1.3 tripwire) -------
+# --- vendored verbatim from the production engine's deterministic tripwire -------
 # Deterministic, LLM-independent veto channel: money/auth/destructive claims are
 # dropped before any model can rationalize them. Defense in depth.
 ESCALATE_PATTERNS = [
@@ -74,7 +74,7 @@ ESCALATE_PATTERNS = [
     r"\bauth(entication|orization)?\b", r"\bsecret\b", r"\b(api[_ -]?)?key\b", r"\btoken\b",
     r"\bcredential", r"\bpassword\b", r"\bmigrat", r"\bdeploy", r"\bproduction\b|\bprod\b",
     r"\bdelete\b", r"\bdrop\b", r"\btruncate\b", r"\bsend (an? )?email", r"\bregulator",
-    r"\blawyer\b", r"\bNTS\b", r"\bgmail\b", r"출금", r"송금", r"이체", r"인증", r"배포",
+    r"\blawyer\b", r"\btax authority\b", r"\bmailbox\b", r"출금", r"송금", r"이체", r"인증", r"배포",
     r"삭제", r"비밀번호", r"세무", r"감사", r"규제",
 ]
 

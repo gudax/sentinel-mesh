@@ -4,6 +4,11 @@
 
 > Verify in the message path. Remember what survives. Get smarter every run.
 
+**Demo film:** [youtu.be/SuaALGyKerI](https://youtu.be/SuaALGyKerI) ·
+**Working papers:** [sentinel.k.nexus](https://sentinel.k.nexus) ·
+**Live playground:** [try to lie to the referee](https://sentinel-playground-675241948019.asia-northeast1.run.app) ·
+**Architecture:** [dashboard/architecture.svg](dashboard/architecture.svg)
+
 Agent fleets are getting good at *talking* to each other over A2A — and bad at
 *trusting* what they say. Sentinel Mesh sits in the message path: every claim a
 worker agent emits is judged by a 3-lens adversarial **Gemini** panel against

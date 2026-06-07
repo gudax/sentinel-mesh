@@ -9,8 +9,8 @@ Label as a **recorded run** — never "live".
 cd /Users/kei/projects/sentinel-mesh && source .venv/bin/activate 2>/dev/null || true
 export SENTINEL_MEMORY_DB=$PWD/demo_data/demo_memory.db
 python -m http.server 8090 -d dashboard &        # dashboard at localhost:8090
-# fleet shots (optional, STEP-7 addendum) — tossnexus Gemini key (AI Studio path):
-export SENTINEL_GEMINI_KEY=$(python3 -c "import json;print(json.load(open('$HOME/.config/tossnexus/gemini-api-key-create.json'))['response']['keyString'])")
+# fleet shots (optional, STEP-7 addendum) — any Gemini API key (AI Studio path):
+export SENTINEL_GEMINI_KEY=<your-gemini-api-key>
 export GOOGLE_API_KEY=$SENTINEL_GEMINI_KEY
 unset GOOGLE_GENAI_USE_VERTEXAI SENTINEL_VERTEX
 ./.venv/bin/python fleet/serve_worker.py researcher 8001 &

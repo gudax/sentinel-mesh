@@ -58,6 +58,13 @@ The eval earned its keep immediately: it caught a real failure mode — a Korean
 
 Plus the live layer: **Cloud Run playground** ("try to lie to the referee") running the identical referee with an ephemeral per-session ledger — visitors watch their own accepted claim become ground truth, then watch its contradiction get vetoed.
 
+## Accomplishments we're proud of
+
+- **The loop closes, measurably.** The same lie that cost a 3-call panel and a FLAG on Run 1 is auto-VETOED on Run 2 — and the verified claim re-serves at 0 model calls / 0.3 ms. Every counter on the dashboard is from the recorded run, not a slide.
+- **We shipped the eval, not just the agent.** 30 expected-verdict claims × 3 live Vertex runs, 100% accuracy and consistency — and the eval caught a real rubric flaw before any human did (96.9% → 100%).
+- **The referee gated its own builders.** Our correction got flagged by our own retrieval bug; fixing the system instead of overriding it is the whole product thesis in one anecdote.
+- **A judge can attack it live.** The Cloud Run playground runs the identical referee — type your own lie, watch it get stamped, then watch its contradiction get vetoed.
+
 ## Challenges we ran into (the honest list)
 
 - **Dependency truth:** bare `google-adk` does not include A2A; the build is gated behind an import probe so this surfaces at minute 0, not hour 6.

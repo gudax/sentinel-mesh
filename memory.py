@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Sentinel Mesh memory layer — verified-claim ledger + kaia ground-truth reads.
+"""Sentinel Mesh memory layer — verified-claim ledger + advisory ground-truth reads.
 
 Two stores, deliberately separated:
   - WRITES  -> sentinel.db / `sentinel_verified_claims` (this file owns it). Never
-    kaia's temporal_facts: kaia's refreshTemporalGraph rebuilds derived rows and
-    would clobber external writes — and kaia.db is a live broker DB we must not touch.
-  - READS   -> kaia.db opened read-only (`mode=ro`) via stdlib sqlite3. Advisory
-    ground-truth comes from operator-curated `memories` rows (+ `temporal_facts`),
+    the broker's derived tables: broker refresh jobs rebuild derived rows and
+    would clobber external writes — the advisory DB is a live store we must not touch.
+  - READS   -> the advisory DB opened read-only (`mode=ro`) via stdlib sqlite3.
+    Advisory ground-truth comes from operator-curated `memories` rows (+ `temporal_facts`),
     each carrying a provenance pointer (filename / source_table:source_id).
 
 The snapshot fed to the referee UNIONs both layers:
-  [ADVISORY] lines  = kaia rows   -> contradiction scores exactly 3 (FLAG)
+  [ADVISORY] lines  = broker rows -> contradiction scores exactly 3 (FLAG)
   [VERIFIED] lines  = our ledger  -> contradiction scores 1-2     (VETO)
 That asymmetry is the closed loop: a Run-1 verified correction upgrades the same
 lie from FLAG to VETO on Run 2.
@@ -25,10 +25,10 @@ from datetime import datetime, timezone
 ROOT = pathlib.Path(__file__).resolve().parent
 SENTINEL_DB = ROOT / "sentinel.db"
 # Advisory ground-truth source: any SQLite exposing the `memories` table contract.
-# Production = the operator's kaia broker; the public demo ships a seeded fictional
-# store (demo_data/demo_memory.db) selected via SENTINEL_MEMORY_DB.
+# Production = the operator's memory broker; the public demo ships a seeded fictional
+# store (demo_data/demo_memory.db). Point SENTINEL_MEMORY_DB at your own store.
 KAIA_DB = pathlib.Path(
-    os.environ.get("SENTINEL_MEMORY_DB", "/Users/kei/projects/kaia-v2/data/kaia.db"))
+    os.environ.get("SENTINEL_MEMORY_DB", str(ROOT / "demo_data" / "demo_memory.db")))
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS sentinel_verified_claims (
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS sentinel_verified_claims (
   confidence    REAL NOT NULL,
   dissent_json  TEXT,                     -- panel dissent at ruling time
   source_agent  TEXT,                     -- which fleet agent emitted the claim
-  evidence_ref  TEXT,                     -- kaia provenance that grounded the ruling
+  evidence_ref  TEXT,                     -- advisory provenance that grounded the ruling
   ruling_ref    TEXT,                     -- prior claim_hash this ruling chains to
   valid_from    TEXT NOT NULL,
   status        TEXT NOT NULL DEFAULT 'current'
