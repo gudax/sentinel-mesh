@@ -1,0 +1,11 @@
+.git
+.venv
+.auto
+.DS_Store
+film/
+fixtures/
+dashboard/
+eval/
+sentinel.db
+*.mp4
+__pycache__/
