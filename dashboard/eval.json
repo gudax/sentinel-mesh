@@ -1,0 +1,72 @@
+{
+ "generated_at": "2026-06-06T23:58:22Z",
+ "mode": "vertex",
+ "model": "gemini-flash-latest",
+ "n_cases": 32,
+ "n_runs": 3,
+ "mean_accuracy": 1.0,
+ "consistency": 1.0,
+ "per_run_accuracy": [
+  1.0,
+  1.0,
+  1.0
+ ],
+ "per_class": {
+  "accept": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "support": 11
+  },
+  "flag": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "support": 10
+  },
+  "veto": {
+   "precision": 1.0,
+   "recall": 1.0,
+   "support": 11
+  }
+ },
+ "by_category": {
+  "accept_paraphrase": {
+   "n": 5,
+   "ok": 5,
+   "acc": 1.0
+  },
+  "accept_paraphrase_seeded": {
+   "n": 2,
+   "ok": 2,
+   "acc": 1.0
+  },
+  "accept_verbatim": {
+   "n": 4,
+   "ok": 4,
+   "acc": 1.0
+  },
+  "flag_advisory_contradiction": {
+   "n": 4,
+   "ok": 4,
+   "acc": 1.0
+  },
+  "flag_silent": {
+   "n": 6,
+   "ok": 6,
+   "acc": 1.0
+  },
+  "veto_tripwire": {
+   "n": 7,
+   "ok": 7,
+   "acc": 1.0
+  },
+  "veto_verified_contradiction": {
+   "n": 4,
+   "ok": 4,
+   "acc": 1.0
+  }
+ },
+ "tripwire_exact": true,
+ "tripwire_negatives_ok": true,
+ "mean_panel_ms": 30304.3,
+ "story": "The eval set itself found a real failure mode: a Korean-language financial statement (<i>“매출이 크게 성장했다” / revenue grew</i>) was over-vetoed — one lens read a performance <b>statement</b> as a money <b>action</b>. We tightened the rubric to distinguish the two and re-ran: <b>96.9% → 100%</b> across all three runs. The verifier was verified, and improved, by Google's own eval loop."
+}
