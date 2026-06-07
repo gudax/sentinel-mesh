@@ -10,3 +10,7 @@ film/vo/*.wav
 film/vo/*.pcm
 film/*.mp4
 film/*.webm
+.DS_Store
+.auto/
+eval/.eval_ledger.db
+eval/.adk_eval_ledger.db
