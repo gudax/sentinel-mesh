@@ -46,7 +46,13 @@ SEGMENTS = [
     # S5 — A2A seam
     "And it binds to real Google A2A — the referee hooks A D K's before-tool "
     "callback, so a vetoed claim never even lands.",
-    # S6 — close
+    # S6 — eval + live playground
+    "We also examined the examiner. A thirty-claim eval set — paraphrase edges, "
+    "advisory contradictions, tripwire negatives — run through Google's A D K "
+    "eval framework. It caught a real failure mode; we fixed the rubric; one "
+    "hundred percent verdict accuracy across three runs. And the referee is "
+    "live on Cloud Run — type your own lie, and watch it get stamped.",
+    # S7 — close
     "Unverified memory can make you suspicious. Only verified memory can make "
     "you certain. Sentinel Mesh — verify in the message path, remember what "
     "survives, get smarter every run.",
@@ -54,6 +60,20 @@ SEGMENTS = [
 
 
 def synth(client, text, path):
+    import re
+    import time as _time
+    from google.genai import errors
+    for attempt in range(5):
+        try:
+            return _synth_once(client, text, path)
+        except errors.ClientError as e:
+            if getattr(e, "code", None) != 429 or attempt == 4:
+                raise
+            m = re.search(r"retry in (\d+(?:\.\d+)?)s", str(e), re.I)
+            _time.sleep(float(m.group(1)) + 2 if m else 40)
+
+
+def _synth_once(client, text, path):
     r = client.models.generate_content(
         model="gemini-2.5-flash-preview-tts",
         contents=STYLE + text,

@@ -50,7 +50,22 @@ python fleet/orchestrator.py                              # delegation + veto se
 # dashboard
 cp fixtures/runs.json dashboard/runs.json
 python -m http.server 8090 -d dashboard
+
+# examine the examiner — referee eval (30 claims, accept/flag/veto + edges)
+SENTINEL_REPLAY=1 python eval/run_eval.py --runs 3        # offline, deterministic
+# ADK eval (Google's own framework): tool trajectory + response match
+pip install 'google-adk[eval]'
+SENTINEL_VERTEX=1 GOOGLE_CLOUD_PROJECT=<proj> GOOGLE_GENAI_USE_VERTEXAI=1 \
+  python eval/run_adk_eval.py
+
+# live playground — try to lie to the referee (FastAPI; deployed on Cloud Run)
+pip install fastapi && uvicorn playground.app:app --port 8080
 ```
+
+**Try it live:** the playground runs the real referee on Cloud Run —
+type your own claim, watch the tripwire and the three lenses rule on it,
+then contradict your own verified claim and watch the closed loop veto it.
+Linked from the dashboard at [sentinel.k.nexus](https://sentinel.k.nexus).
 
 ## Components
 
@@ -61,7 +76,9 @@ python -m http.server 8090 -d dashboard
 | `plane.py` | The closed-loop seam: memory-first `intercept()` (verified claims cost 0 model calls) + gated `correct()` (even corrections must pass the referee). |
 | `demo.py` | The filmable two-run sequence with honest, measured counters. |
 | `fleet/` | Real ADK agents over the A2A protocol (`to_a2a`, `RemoteA2aAgent`) with the sentinel bound to the non-experimental `before_tool_callback`. |
-| `dashboard/` | Static diff panel: RUN 1 \| verified ledger \| RUN 2. |
+| `eval/` | The referee examined: a 30-claim expected-verdict set (paraphrase, advisory-contradiction, verified-contradiction, tripwire word-boundary edges) scored by a deterministic harness **and** Google ADK eval (`EvalSet` + `AgentEvaluator`). Live Vertex result: **100% verdict accuracy × 3 runs, 100% consistency** — after the eval itself caught a rubric ambiguity (96.9% → fix → 100%). |
+| `playground/` | "Try to lie to the referee" — FastAPI service on Cloud Run running the real referee against read-only demo memory + an ephemeral per-session verified ledger. Rate-limited; nothing persisted. |
+| `dashboard/` | Working papers: RUN 1 \| verified ledger \| RUN 2 diff panel + independent-examination (eval) panel + playground link. |
 
 ## The rubric (the part that matters)
 

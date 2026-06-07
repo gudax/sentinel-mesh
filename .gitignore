@@ -14,3 +14,5 @@ film/*.webm
 .auto/
 eval/.eval_ledger.db
 eval/.adk_eval_ledger.db
+film/assets/playground-clip.webm
+film/take.webm
