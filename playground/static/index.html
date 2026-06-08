@@ -3,123 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Try to lie to the referee — Sentinel Mesh</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='8' y='8' width='84' height='84' fill='%23f6f2e9' stroke='%231d1a14' stroke-width='6'/><path d='M28 52l14 14 30-30' stroke='%23b3261e' stroke-width='10' fill='none'/></svg>">
+<title>Sentinel Mesh — verified-memory control plane</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='8' y='8' width='84' height='84' rx='18' fill='%23ffffff' stroke='%231c1b18' stroke-width='6'/><path d='M28 52l14 14 30-30' stroke='%23117a4d' stroke-width='10' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#f6f2e9; --paper-2:#efe9da; --paper-deep:#e7dfcc;
-    --ink:#221e16; --ink-soft:#6b6354; --ink-faint:#998f7c;
-    --rule:#d9d0bc; --rule-strong:#b9ad92; --margin-red:#bf3b2d;
-    --accept:#1e6b40; --veto:#b3261e; --flag:#996000; --carbon:#1f4e79;
-    --serif:"Instrument Serif",Georgia,serif;
-    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    --bg:#faf9f7; --surface:#ffffff; --surface-sunken:#f3f1ec;
+    --border:#e8e4dc; --border-strong:#d6d0c4;
+    --ink:#1c1b18; --ink-2:#565049; --ink-3:#8f897e;
+    --accent:#cc5a36; --accent-ink:#9e4527; --accent-bg:#fbece4;
+    --ok:#117a4d; --ok-bg:#e6f4ec; --ok-border:#bfe3cd;
+    --no:#c43d2e; --no-bg:#fcebe8; --no-border:#f2c7bf;
+    --info:#2f6db0; --info-bg:#e9f1fa;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-pill:999px;
+    --sh-sm:0 1px 2px rgba(28,27,24,.06);
+    --sh:0 4px 16px -4px rgba(28,27,24,.10);
+    --sh-lg:0 16px 48px -12px rgba(28,27,24,.18);
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{background:var(--paper-deep)}
-  body{font-family:var(--mono);color:var(--ink);background:var(--paper);min-height:100vh;font-size:13px;line-height:20px;-webkit-font-smoothing:antialiased}
-  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:40;opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
-  body::after{content:"";position:fixed;top:0;bottom:0;left:clamp(12px,3vw,40px);width:5px;z-index:1;
-    border-left:1.5px solid var(--margin-red);border-right:1.5px solid var(--margin-red);opacity:.5;pointer-events:none}
-  ::selection{background:var(--ink);color:var(--paper)}
-  .sheet{max-width:880px;margin:0 auto;padding:0 clamp(22px,5vw,64px);position:relative;z-index:2}
+  html{background:var(--bg)}
+  body{font-family:var(--sans);color:var(--ink);background:var(--bg);min-height:100vh;
+    font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--accent-bg);color:var(--accent-ink)}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{color:var(--accent-ink)}
+  .sheet{max-width:880px;margin:0 auto;padding:0 clamp(22px,5vw,40px)}
 
+  /* brand lockup */
   header{padding-top:30px}
-  .doc-rule{display:flex;align-items:baseline;gap:12px;border-bottom:2.5px solid var(--ink);padding-bottom:7px}
-  .doc-rule .org{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
-  .doc-rule .org em{font-style:normal;color:var(--margin-red)}
-  .doc-rule .no{margin-left:auto;font-size:10.5px;color:var(--ink-soft);text-align:right}
-  .doc-rule a{color:inherit;text-decoration:none}
-  h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:26px 0 0}
-  h1 .ital{font-style:italic;color:var(--ink-soft)}
-  .lede{font-size:12.5px;line-height:20px;color:var(--ink-soft);margin:14px 0 0;max-width:62ch}
-  .lede b{color:var(--ink);font-weight:500}
+  .brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .brand .mark{font-weight:800;letter-spacing:-.03em;color:var(--ink);font-size:17px}
+  .brand .prod{font-weight:500;color:var(--ink-2);font-size:17px}
+  .brand .live{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ok);letter-spacing:.02em}
+  .brand .back{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .brand .back a{color:var(--ink-3)} .brand .back a:hover{color:var(--accent)}
 
-  .truth{margin-top:26px;border:1px solid var(--rule-strong);background:var(--paper-2);padding:14px 16px}
-  .truth .cap{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--carbon)}
-  .truth ul{list-style:none;margin-top:8px}
-  .truth li{font-size:11.5px;line-height:17px;color:var(--ink-soft);padding:4px 0;border-top:1px dotted var(--rule)}
+  h1{font-family:var(--sans);font-weight:800;font-size:clamp(32px,6vw,52px);
+    line-height:1.08;letter-spacing:-.02em;margin:28px 0 0}
+  h1 .ital{color:var(--ink-3)}
+  .lede{font-size:16px;line-height:1.6;color:var(--ink-2);margin:16px 0 0;max-width:62ch}
+  .lede b{color:var(--ink);font-weight:600}
+
+  .label{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;
+    font-weight:500;color:var(--ink-3)}
+
+  /* ground truth card */
+  .truth{margin-top:28px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--r-lg);box-shadow:var(--sh-sm);padding:18px 20px}
+  .truth .cap{color:var(--info)}
+  .truth ul{list-style:none;margin-top:12px}
+  .truth li{font-size:14px;line-height:1.55;color:var(--ink-2);padding:8px 0;border-top:1px solid var(--border)}
   .truth li:first-child{border-top:none}
-  .truth li b{color:var(--ink);font-weight:500}
+  .truth li b{color:var(--ink);font-weight:600}
 
-  .bench{margin-top:26px}
-  .bench .cap{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
-  textarea{width:100%;margin-top:10px;background:transparent;border:none;border-bottom:2px solid var(--ink);
-    font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.3;color:var(--ink);
-    padding:6px 2px 10px;resize:none;outline:none;min-height:64px}
-  textarea::placeholder{color:var(--ink-faint)}
-  .row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
-  button.rule-btn{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--paper);background:var(--ink);border:none;padding:11px 22px;cursor:pointer}
-  button.rule-btn:disabled{opacity:.45;cursor:wait}
+  /* claim bench */
+  .bench{margin-top:28px}
+  textarea{width:100%;margin-top:12px;background:var(--surface);
+    border:1px solid var(--border-strong);border-radius:var(--r);
+    font-family:var(--sans);font-size:18px;line-height:1.4;color:var(--ink);
+    padding:14px 16px;resize:none;outline:none;min-height:74px;box-shadow:var(--sh-sm)}
+  textarea:focus{border-color:var(--accent)}
+  textarea::placeholder{color:var(--ink-3)}
+  .row{display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap}
+  button.rule-btn{font-family:var(--sans);font-size:15px;font-weight:600;
+    color:#fff;background:var(--accent);border:none;border-radius:var(--r);
+    padding:11px 22px;cursor:pointer}
+  button.rule-btn:hover{background:var(--accent-ink)}
+  button.rule-btn:disabled{opacity:.55;cursor:wait}
   .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{font-size:11px;border:1px solid var(--rule-strong);background:var(--paper-2);padding:4px 10px;cursor:pointer;color:var(--ink-soft)}
-  .chip:hover{border-color:var(--ink);color:var(--ink)}
-  .hint{font-size:10.5px;color:var(--ink-faint);margin-top:8px}
+  .chip{font-family:var(--sans);font-size:13px;border:1px solid var(--border-strong);
+    background:var(--surface);border-radius:var(--r-pill);padding:7px 14px;cursor:pointer;color:var(--ink-2)}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  .hint{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:10px}
 
-  .verdict-zone{margin-top:30px;display:none}
+  /* verdict zone */
+  .verdict-zone{margin-top:32px;display:none}
   .verdict-zone.on{display:block}
-  .vhead{display:flex;align-items:center;gap:18px;border-top:2.5px solid var(--ink);padding-top:16px}
-  .stamp{display:inline-block;font-size:20px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
-    padding:8px 18px 7px 22px;border:3px solid currentColor;border-radius:3px;
-    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3.5px currentColor;
-    transform:rotate(-2.4deg);mix-blend-mode:multiply}
-  @keyframes stamp-in{0%{transform:rotate(-2.4deg) scale(2);opacity:0}
-    60%{transform:rotate(-2.4deg) scale(.92);opacity:1}100%{transform:rotate(-2.4deg) scale(1);opacity:.94}}
+  .vhead{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    border-top:1px solid var(--border);padding-top:24px}
+  /* large clean verdict banner pill */
+  .stamp{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
+    font-weight:600;font-size:20px;letter-spacing:.03em;padding:10px 22px;
+    border-radius:var(--r-pill);border:1px solid;line-height:1}
+  .stamp::before{font-weight:600}
+  .stamp.accept{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-border)}
+  .stamp.accept::before{content:"\2713"}
+  .stamp.veto{color:var(--no);background:var(--no-bg);border-color:var(--no-border)}
+  .stamp.veto::before{content:"\2715"}
+  .stamp.flag{color:var(--accent-ink);background:var(--accent-bg);border-color:#f0cdba}
+  .stamp.flag::before{content:"\26A0"}
+  @keyframes stamp-in{0%{transform:scale(1.6);opacity:0}
+    60%{transform:scale(.96);opacity:1}100%{transform:scale(1);opacity:1}}
   .stamp{animation:stamp-in .42s cubic-bezier(.2,1.4,.4,1) both}
-  .stamp.accept{color:var(--accept)} .stamp.veto{color:var(--veto)} .stamp.flag{color:var(--flag)}
-  .vmeta{font-size:11px;color:var(--ink-soft)}
-  .vclaim{font-family:var(--serif);font-style:italic;font-size:19px;margin-top:14px}
-  .vclaim::before{content:"“"} .vclaim::after{content:"”"}
-  .lens-table{margin-top:14px;border:1px solid var(--rule-strong)}
-  .lens-tr{display:flex;border-top:1px solid var(--rule)}
+  .vmeta{font-family:var(--mono);font-size:12.5px;color:var(--ink-3)}
+  .vclaim{font-family:var(--sans);font-size:18px;font-weight:500;color:var(--ink);margin-top:16px;line-height:1.45}
+  .vclaim::before{content:"\201C"} .vclaim::after{content:"\201D"}
+
+  .lens-table{margin-top:16px;border:1px solid var(--border);border-radius:var(--r);
+    overflow:hidden;background:var(--surface)}
+  .lens-tr{display:flex;border-top:1px solid var(--border)}
   .lens-tr:first-child{border-top:none}
-  .lens-tr .l{width:110px;padding:8px 12px;font-size:11px;color:var(--ink-soft);border-right:1px solid var(--rule)}
-  .lens-tr .s{width:46px;padding:8px 0;text-align:center;font-weight:600;border-right:1px solid var(--rule)}
-  .lens-tr .s.g{color:var(--accept)} .lens-tr .s.y{color:var(--flag)} .lens-tr .s.r{color:var(--veto)}
-  .lens-tr .v{flex:1;padding:8px 12px;font-size:11px;line-height:16px;color:var(--ink-soft)}
-  .trip-note{margin-top:12px;font-size:12px;color:var(--veto);font-weight:500}
-  .written{margin-top:12px;font-size:11.5px;color:var(--carbon)}
-  .err{margin-top:14px;font-size:12px;color:var(--veto)}
+  .lens-tr .l{width:120px;padding:10px 14px;font-family:var(--mono);font-size:12px;
+    color:var(--ink-2);border-right:1px solid var(--border)}
+  .lens-tr .s{width:48px;padding:10px 0;text-align:center;font-family:var(--mono);
+    font-weight:600;border-right:1px solid var(--border);font-variant-numeric:tabular-nums}
+  .lens-tr .s.g{color:var(--ok)} .lens-tr .s.y{color:var(--accent-ink)} .lens-tr .s.r{color:var(--no)}
+  .lens-tr .v{flex:1;padding:10px 14px;font-size:13px;line-height:1.5;color:var(--ink-2)}
+  .trip-note{margin-top:14px;font-family:var(--mono);font-size:13px;color:var(--no);font-weight:500}
+  .written{margin-top:14px;font-family:var(--mono);font-size:13px;color:var(--ok);font-weight:500}
+  .err{margin-top:16px;font-family:var(--mono);font-size:13px;color:var(--no)}
 
-  .register{margin-top:30px;background:var(--paper-2);border:1px solid var(--rule-strong);padding:14px 16px;color:var(--carbon);display:none}
+  /* verified ledger */
+  .register{margin-top:30px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--r-lg);box-shadow:var(--sh-sm);padding:18px 20px;display:none}
   .register.on{display:block}
-  .register .cap{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
-  .register .sub{font-size:10.5px;color:var(--ink-faint);margin-top:2px}
-  .register ul{list-style:none;margin-top:8px}
-  .register li{font-size:11.5px;padding:5px 0;border-top:1px dotted var(--carbon)}
-  .register li .h{font-weight:600;margin-right:8px}
-  .register li em{font-family:var(--serif);font-size:13px}
+  .register .cap{color:var(--ink-2)}
+  .register .sub{font-size:13px;color:var(--ink-3);margin-top:6px;line-height:1.5}
+  .register ul{list-style:none;margin-top:12px}
+  .register li{font-size:14px;padding:9px 0;border-top:1px solid var(--border);
+    display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+  .register li .h{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ok);
+    display:inline-flex;align-items:center;gap:6px}
+  .register li .h::before{content:"\2713"}
+  .register li em{font-style:normal;color:var(--ink)}
 
-  footer{margin:44px 0 40px;border-top:1px solid var(--rule-strong);padding-top:12px;
-    font-size:10.5px;line-height:17px;color:var(--ink-faint);display:flex;gap:18px;flex-wrap:wrap}
-  footer a{color:var(--ink-soft)}
+  footer{margin:44px 0 40px;border-top:1px solid var(--border);padding-top:14px;
+    font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--ink-3);
+    display:flex;gap:20px;flex-wrap:wrap}
+  footer a{color:var(--ink-2)}
 </style>
 </head>
 <body>
 <div class="sheet">
   <header>
-    <div class="doc-rule">
-      <span class="org">Sentinel <em>Mesh</em> · Live Examination Room</span>
-      <span class="no"><a href="https://sentinel.k.nexus">← working papers (recorded run)</a><br>EXHIBIT P · LIVE ON CLOUD RUN</span>
+    <div class="brand">
+      <span class="mark">NEXUS</span><span class="prod">Sentinel Mesh</span>
+      <span class="live">● LIVE · verified-memory control plane</span>
+    </div>
+    <div class="brand" style="margin-top:8px">
+      <span class="back"><a href="https://sentinel.k.nexus">← Recorded run (dashboard)</a></span>
+      <span class="live" style="margin-left:auto;color:var(--ink-3)">Live playground · Cloud Run</span>
     </div>
     <h1>Try to lie <span class="ital">to the referee.</span></h1>
     <p class="lede">This is the <b>real production referee</b> — deterministic tripwire + 3-lens adversarial
       <b>Gemini panel on Vertex AI</b> — ruling live against the demo ground truth below.
       State a claim. If it survives, it becomes <b>verified memory for your session</b> —
-      then try contradicting it and watch the same lie get <b>VETOED</b>.</p>
+      then try contradicting it and watch the same lie get <b>blocked</b>.</p>
   </header>
 
   <section class="truth">
-    <div class="cap">The ground truth on file (so lying is fair)</div>
+    <div class="cap label">Ground truth on file (so lying is fair)</div>
     <ul id="truth"><li>loading…</li></ul>
   </section>
 
   <section class="bench">
-    <div class="cap">State your claim</div>
+    <div class="cap label">State your claim</div>
     <textarea id="claim" maxlength="280" rows="2" placeholder="Meridian Dynamics' financial year end is 30 June."></textarea>
     <div class="row">
       <button class="rule-btn" id="go">Rule on it</button>
@@ -144,8 +186,8 @@
   </section>
 
   <section class="register" id="register">
-    <div class="cap">Register of verified claims — your session</div>
-    <div class="sub">an ACCEPT is written back; contradict one of these and the panel scores it 1–2 → VETO</div>
+    <div class="cap label">Verified ledger — your session</div>
+    <div class="sub">an accepted claim is written back; contradict one of these and the panel scores it 1–2 → Blocked</div>
     <ul id="reg-list"></ul>
   </section>
 
@@ -175,6 +217,8 @@ function lensRow(l){
     <span class="v">${(l.violations||[]).join(" · ").slice(0,260) || "no violation found"}</span></div>`;
 }
 
+const VERDICT_LABEL = {accept:"Verified", veto:"Blocked", flag:"Flagged"};
+
 async function go(){
   const claim = $("claim").value.trim();
   if (claim.length < 3) return;
@@ -187,7 +231,7 @@ async function go(){
     if (!r.ok) throw new Error(d.error || d.detail?.[0]?.msg || r.status);
     $("vz").classList.add("on");
     const st = $("stamp");
-    st.className = "stamp " + d.verdict; st.textContent = d.verdict;
+    st.className = "stamp " + d.verdict; st.textContent = VERDICT_LABEL[d.verdict] || d.verdict;
     st.style.animation = "none"; void st.offsetWidth; st.style.animation = "";
     $("vmeta").innerHTML = `confidence ${d.confidence} · ${d.lens_calls} lens calls · ${d.elapsed_ms.toLocaleString()} ms`;
     $("vclaim").textContent = d.claim;
@@ -195,16 +239,16 @@ async function go(){
     $("lenses").style.display = d.lens_scores.length ? "" : "none";
     if (d.tripwire && d.tripwire.length) {
       $("trip").style.display = "";
-      $("trip").textContent = `deterministic tripwire — vetoed before any model saw it: ${d.tripwire.join(", ")}`;
+      $("trip").textContent = `deterministic tripwire — blocked before any model saw it: ${d.tripwire.join(", ")}`;
     } else $("trip").style.display = "none";
     if (d.written_to_ledger) {
       $("written").style.display = "";
-      $("written").textContent = `↳ written back as VERIFIED ${d.written_to_ledger} — now try contradicting it.`;
+      $("written").textContent = `↳ written back as verified ${d.written_to_ledger} — now try contradicting it.`;
     } else $("written").style.display = "none";
     if ((d.session_ledger||[]).length) {
       $("register").classList.add("on");
       $("reg-list").innerHTML = d.session_ledger.map(r =>
-        `<li><span class="h">VERIFIED · ${r.hash}</span><em>“${r.claim}”</em></li>`).join("");
+        `<li><span class="h">Verified · ${r.hash}</span><em>“${r.claim}”</em></li>`).join("");
     }
   } catch(e) {
     $("err").style.display = ""; $("err").textContent = "⨯ " + e.message;

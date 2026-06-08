@@ -3,147 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <title>Sentinel Mesh — demo reel</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#f6f2e9;--paper-2:#efe9da;--paper-deep:#e7dfcc;
-    --ink:#221e16;--ink-soft:#6b6354;--ink-faint:#998f7c;
-    --rule:#d9d0bc;--rule-strong:#b9ad92;--margin-red:#bf3b2d;
-    --accept:#1e6b40;--veto:#b3261e;--flag:#996000;--carbon:#1f4e79;
-    --serif:"Instrument Serif",Georgia,serif;--mono:"IBM Plex Mono",ui-monospace,monospace}
+  :root{
+    --bg:#faf9f7; --surface:#ffffff; --surface-sunken:#f3f1ec;
+    --border:#e8e4dc; --border-strong:#d6d0c4;
+    --ink:#1c1b18; --ink-2:#565049; --ink-3:#8f897e;
+    --accent:#cc5a36; --accent-ink:#9e4527; --accent-bg:#fbece4;
+    --ok:#117a4d; --ok-bg:#e6f4ec; --ok-border:#bfe3cd;
+    --no:#c43d2e; --no-bg:#fcebe8; --no-border:#f2c7bf;
+    --info:#2f6db0; --info-bg:#e9f1fa;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-pill:999px;
+    --sh-sm:0 1px 2px rgba(28,27,24,.06);
+    --sh:0 4px 16px -4px rgba(28,27,24,.10);
+    --sh-lg:0 16px 48px -12px rgba(28,27,24,.18);
+  }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{width:1920px;height:1080px;overflow:hidden;background:#000;color:var(--ink);
-    font-family:var(--mono);-webkit-font-smoothing:antialiased}
-  .scene{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;background:var(--paper)}
+    font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .scene{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;background:var(--bg)}
   .scene.on{opacity:1}
   #preroll{position:absolute;inset:0;background:#000;z-index:99;opacity:1;transition:opacity .4s}
   #preroll.off{opacity:0;pointer-events:none}
-  /* paper grain + red ledger margin on every scene */
-  .scene::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:30;opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
-  .scene::after{content:"";position:absolute;top:0;bottom:0;left:64px;width:6px;z-index:1;
-    border-left:2px solid var(--margin-red);border-right:2px solid var(--margin-red);opacity:.45;pointer-events:none}
 
-  /* title cards — document covers */
-  .titlecard{display:flex;flex-direction:column;justify-content:center;padding:0 190px}
-  .doc-rule{display:flex;align-items:baseline;gap:22px;border-bottom:4px solid var(--ink);padding-bottom:14px;position:relative;z-index:2}
-  .doc-rule .org{font-size:24px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
-  .doc-rule .org em{font-style:normal;color:var(--margin-red)}
-  .doc-rule .no{margin-left:auto;font-size:17px;color:var(--ink-soft);text-align:right;line-height:1.5}
-  .titlecard h1{font-family:var(--serif);font-weight:400;font-size:124px;line-height:1.02;letter-spacing:-.01em;margin-top:46px;position:relative;z-index:2}
-  .titlecard h1 .ital{font-style:italic;color:var(--ink-soft)}
-  .titlecard .sub{font-size:27px;line-height:1.55;color:var(--ink-soft);margin-top:34px;max-width:1280px;position:relative;z-index:2}
-  .titlecard .sub b{color:var(--ink);font-weight:500}
-  .urls{margin-top:56px;font-size:23px;line-height:2;color:var(--ink-soft);position:relative;z-index:2}
-  .urls b{color:var(--carbon);font-weight:600}
-  .urls .dim{color:var(--ink-faint);font-size:17px;margin-top:10px}
-  .stamp{display:inline-block;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
-    border:3px solid currentColor;border-radius:4px;padding:8px 20px;
-    box-shadow:inset 0 0 0 2.5px var(--paper),inset 0 0 0 5px currentColor;
-    transform:rotate(-2.4deg);mix-blend-mode:multiply;opacity:0}
-  .stamp.in{animation:stamp-in .45s cubic-bezier(.2,1.4,.4,1) both}
-  @keyframes stamp-in{0%{transform:rotate(-2.4deg) scale(2.1);opacity:0}
-    60%{transform:rotate(-2.4deg) scale(.93);opacity:1}100%{transform:rotate(-2.4deg) scale(1);opacity:.94}}
-  .cover-stamp{position:absolute;top:110px;right:150px;font-size:21px;color:var(--carbon);z-index:3}
+  /* ── Brand lockup ── */
+  .brand{display:flex;align-items:baseline;gap:10px;font-family:var(--sans)}
+  .brand .mark{font-weight:800;letter-spacing:-.03em;color:var(--ink);font-size:22px}
+  .brand .prod{font-weight:500;color:var(--ink-2);font-size:22px}
+  .brand .live{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ok);letter-spacing:.04em}
 
-  /* terminal scenes — dark exhibit window pinned to the working papers */
-  .termscene{display:flex;flex-direction:column;padding:80px 130px;gap:30px}
-  .scenetitle{font-size:20px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;position:relative;z-index:2;
-    border-bottom:2.5px solid var(--ink);padding-bottom:12px}
-  .scenetitle b{color:var(--margin-red);font-weight:600}
-  .term{flex:1;background:#16140f;border:1.5px solid var(--ink);
-    padding:38px 46px;font-family:var(--mono);font-size:21.5px;line-height:1.62;overflow:hidden;position:relative;z-index:2;
-    box-shadow:8px 10px 0 rgba(34,30,22,.12)}
-  .term .ln{white-space:pre-wrap;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s;color:#cdc6b4}
+  /* ── Verdict pill ── */
+  .verdict{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);
+    font-weight:600;font-size:14px;letter-spacing:.03em;padding:6px 14px;
+    border-radius:var(--r-pill);border:1px solid;line-height:1}
+  .verdict.ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-border)}
+  .verdict.no{color:var(--no);background:var(--no-bg);border-color:var(--no-border)}
+  .verdict.flag{color:#b36a00;background:#fff8e6;border-color:#f0d080}
+  .verdict.big{font-size:22px;padding:14px 32px;gap:12px}
+  .verdict.big.in{animation:pill-in .4s cubic-bezier(.2,1.4,.4,1) both}
+  @keyframes pill-in{0%{transform:scale(1.6);opacity:0}60%{transform:scale(.95)}100%{transform:scale(1);opacity:1}}
+
+  /* ── Title / cover scenes ── */
+  .titlecard{display:flex;flex-direction:column;justify-content:center;padding:0 160px}
+  .titlecard .topbar{display:flex;align-items:baseline;gap:20px;
+    border-bottom:2px solid var(--border-strong);padding-bottom:18px;margin-bottom:0}
+  .titlecard .topbar .tag{font-family:var(--mono);font-size:13px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink-3)}
+  .titlecard .topbar .challenge{margin-left:auto;font-family:var(--mono);font-size:13px;
+    color:var(--ink-3);text-align:right;line-height:1.6}
+  .titlecard h1{font-family:var(--sans);font-weight:800;font-size:120px;line-height:1.04;
+    letter-spacing:-.03em;margin-top:52px;color:var(--ink)}
+  .titlecard h1 .em{color:var(--accent)}
+  .titlecard .sub{font-size:28px;line-height:1.6;color:var(--ink-2);margin-top:36px;
+    max-width:1320px;font-weight:400}
+  .titlecard .sub b{color:var(--ink);font-weight:600}
+  .titlecard .sub .acc{color:var(--accent)}
+  .urls{margin-top:60px;display:flex;flex-direction:column;gap:8px;font-family:var(--mono);
+    font-size:22px;line-height:1.7;color:var(--ink-2)}
+  .urls .row-url{display:flex;gap:14px;align-items:baseline}
+  .urls .lbl{color:var(--ink-3);font-size:14px;letter-spacing:.06em;text-transform:uppercase;min-width:240px}
+  .urls .val{color:var(--ink);font-weight:600}
+  .urls .dim{color:var(--ink-3);font-size:16px;margin-top:10px;font-family:var(--mono)}
+
+  /* ── Scene label bar (replaces scenetitle) ── */
+  .scenebar{display:flex;align-items:baseline;gap:16px;padding-bottom:14px;
+    border-bottom:1.5px solid var(--border);position:relative;z-index:2}
+  .scenebar .num{font-family:var(--mono);font-size:13px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--accent);font-weight:600}
+  .scenebar .title{font-family:var(--mono);font-size:14px;color:var(--ink-2);
+    letter-spacing:.03em;text-transform:uppercase}
+  .scene-meta{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-3);
+    letter-spacing:.06em;text-transform:uppercase}
+
+  /* ── Terminal scenes ── */
+  .termscene{display:flex;flex-direction:column;padding:72px 120px;gap:28px}
+  .term{flex:1;background:#16150f;border:1px solid var(--border-strong);border-radius:var(--r-lg);
+    padding:40px 48px;font-family:var(--mono);font-size:21px;line-height:1.64;overflow:hidden;
+    position:relative;z-index:2;box-shadow:var(--sh)}
+  .term .ln{white-space:pre-wrap;opacity:0;transform:translateY(4px);
+    transition:opacity .25s,transform .25s;color:#c8c0ae}
   .term .ln.show{opacity:1;transform:none}
-  .term .ln.cmd{color:#f6f2e9;font-weight:500}
-  .term .ln.ok{color:#7fbf8f}
-  .term .ln.veto{color:#e06a5e}
+  .term .ln.cmd{color:#f5f3ef;font-weight:600}
+  .term .ln.ok{color:#5dbf8a}
+  .term .ln.veto{color:#e07065}
   .term .ln.flag{color:#d9a341}
-  .term .ln.dim{color:#857f6e}
-  .exhibit-tag{position:absolute;top:64px;right:130px;font-size:15px;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;z-index:3}
+  .term .ln.dim{color:#6b6455}
 
-  /* dashboard scenes */
+  /* ── Dashboard scenes ── */
   .dashscene{padding:0}
   .dashwrap{position:absolute;inset:0;overflow:hidden}
   .dashwrap iframe{width:1920px;height:2400px;border:0;transform-origin:top left;
     transition:transform 2.2s cubic-bezier(.4,0,.2,1)}
-  .lowerthird{position:absolute;left:96px;bottom:84px;background:var(--paper);
-    border:2.5px solid var(--ink);padding:28px 40px;max-width:980px;z-index:5;
-    box-shadow:8px 10px 0 rgba(34,30,22,.14);opacity:0;transform:translateY(12px);transition:all .7s}
+  .lowerthird{position:absolute;left:96px;bottom:80px;
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+    padding:28px 36px;max-width:1000px;z-index:5;box-shadow:var(--sh-lg);
+    opacity:0;transform:translateY(12px);transition:all .7s}
   .lowerthird.show{opacity:1;transform:none}
-  .lowerthird .k{font-size:16px;color:var(--margin-red);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
-  .lowerthird .v{font-family:var(--serif);font-size:31px;letter-spacing:0;margin-top:10px;line-height:1.3}
-  .lowerthird .v .f{color:var(--flag)} .lowerthird .v .r{color:var(--veto)} .lowerthird .v .c{color:var(--carbon)} .lowerthird .v .g{color:var(--accept)}
+  .lowerthird .k{font-family:var(--mono);font-size:13px;color:var(--ink-3);
+    letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  .lowerthird .v{font-family:var(--sans);font-weight:600;font-size:28px;
+    color:var(--ink);margin-top:10px;line-height:1.35}
+  .lowerthird .v .ok-t{color:var(--ok)}
+  .lowerthird .v .no-t{color:var(--no)}
+  .lowerthird .v .flag-t{color:#b36a00}
+  .lowerthird .v .info-t{color:var(--info)}
 
-  /* playground clip scene */
-  .clipscene{display:flex;flex-direction:column;padding:80px 130px;gap:30px}
-  .clipframe{flex:1;border:1.5px solid var(--ink);box-shadow:8px 10px 0 rgba(34,30,22,.12);
-    overflow:hidden;position:relative;z-index:2;background:#f6f2e9}
+  /* ── Clip scene ── */
+  .clipscene{display:flex;flex-direction:column;padding:72px 120px;gap:28px}
+  .clipframe{flex:1;border:1px solid var(--border);border-radius:var(--r-lg);
+    box-shadow:var(--sh);overflow:hidden;position:relative;z-index:2;background:var(--surface)}
   .clipframe video{width:100%;height:100%;object-fit:cover;object-position:top}
 </style>
 </head>
 <body>
   <div id="preroll"></div>
 
+  <!-- S1: Title / Cover -->
   <section class="scene titlecard" id="s1">
-    <span class="stamp cover-stamp" id="coverstamp">Recorded run · measured</span>
-    <div class="doc-rule">
-      <span class="org">Sentinel <em>Mesh</em></span>
-      <span class="no">GOOGLE FOR STARTUPS · AI AGENTS CHALLENGE 2026<br>WORKING PAPERS · TRACK 2 OPTIMIZE · APAC</span>
+    <div class="topbar">
+      <div class="brand">
+        <span class="mark">NEXUS</span><span class="prod">Sentinel Mesh</span>
+        <span class="live">● LIVE · verified-memory control plane</span>
+      </div>
+      <span class="challenge">GOOGLE FOR STARTUPS · AI AGENTS CHALLENGE 2026<br>TRACK 2 OPTIMIZE · APAC</span>
     </div>
-    <h1>Verified memory <span class="ital">for agent fleets.</span></h1>
-    <p class="sub">Every agent memory today is <b>gullible</b> — it stores whatever an agent says.
+    <h1>Verified memory<br><span class="em">for agent fleets.</span></h1>
+    <p class="sub">Agent memory today is <b>gullible</b> — it stores whatever an agent says.
       Sentinel Mesh puts an <b>adversarial referee in the A2A message path</b>:
-      verify in flight, remember what survives, get smarter every run.</p>
+      <span class="acc">verify in flight</span>, remember what survives, get smarter every run.</p>
+    <div style="margin-top:52px;display:flex;gap:16px;align-items:center">
+      <span class="verdict ok big" id="coverstamp">✓ Verified</span>
+      <span class="verdict no big" style="opacity:0;animation-delay:.22s" id="coverstamp2">✕ Blocked</span>
+    </div>
   </section>
 
+  <!-- S2: Real Google stack — boot -->
   <section class="scene termscene" id="s2">
-    <span class="exhibit-tag">Exhibit T-1 · live boot</span>
-    <div class="scenetitle"><b>01</b> · real google stack — ADK workers · live A2A agent cards · Gemini referee</div>
+    <div class="scenebar">
+      <span class="num">01</span>
+      <span class="title">Real Google Stack — ADK Workers · Live A2A Agent Cards · Gemini Referee</span>
+      <span class="scene-meta">live boot</span>
+    </div>
     <div class="term" id="t-boot"></div>
   </section>
 
+  <!-- S3a: Run 1 — terminal -->
   <section class="scene termscene" id="s3a">
-    <span class="exhibit-tag">Exhibit T-2 · run 1</span>
-    <div class="scenetitle"><b>02</b> · run 1 — cold memory · accept / hard-veto / flag</div>
+    <div class="scenebar">
+      <span class="num">02</span>
+      <span class="title">Run 1 — Cold Memory · Accept / Hard-Veto / Flag</span>
+      <span class="scene-meta">run 1</span>
+    </div>
     <div class="term" id="t-run1"></div>
   </section>
 
+  <!-- S3b: Run 1 — dashboard -->
   <section class="scene dashscene" id="s3b">
     <div class="dashwrap"><iframe id="if1" src="/dashboard/index.html" scrolling="no"></iframe></div>
-    <div class="lowerthird" id="lt1"><div class="k">Run 1 · cold memory</div>
-      <div class="v">1 accept · 1 <span class="r">hard veto</span> (no model) · 1 <span class="f">flag</span> → gated correction → ledger 0 → 2</div></div>
+    <div class="lowerthird" id="lt1">
+      <div class="k">Run 1 · Cold Memory</div>
+      <div class="v">
+        <span class="ok-t">1 accept</span> ·
+        <span class="no-t">1 hard veto</span> (no model in that decision) ·
+        <span class="flag-t">1 flag</span> → gated correction → ledger 0 → 2
+      </div>
+    </div>
   </section>
 
+  <!-- S4: Run 2 — dashboard -->
   <section class="scene dashscene" id="s4">
     <div class="dashwrap"><iframe id="if2" src="/dashboard/index.html" scrolling="no"></iframe></div>
-    <div class="lowerthird" id="lt2"><div class="k">Run 2 · warm memory · nothing changed but memory</div>
-      <div class="v">memory-served: <span class="c">0 calls / 0.3 ms</span> · the lie: <span class="f">FLAG</span> → <span class="r">VETO</span> · lens calls 9 → 3</div></div>
+    <div class="lowerthird" id="lt2">
+      <div class="k">Run 2 · Warm Memory · Nothing Changed But Memory</div>
+      <div class="v">
+        memory-served: <span class="info-t">0 calls / 0.3 ms</span> ·
+        the lie: <span class="flag-t">FLAG</span> → <span class="no-t">VETO</span> ·
+        lens calls 9 → 3
+      </div>
+    </div>
   </section>
 
+  <!-- S5: The seam — A2A before_tool_callback -->
   <section class="scene termscene" id="s5">
-    <span class="exhibit-tag">Exhibit T-3 · the seam</span>
-    <div class="scenetitle"><b>03</b> · the seam — ADK before_tool_callback · veto fires before the tool</div>
+    <div class="scenebar">
+      <span class="num">03</span>
+      <span class="title">The Seam — ADK before_tool_callback · Veto Fires Before the Tool</span>
+      <span class="scene-meta">a2a seam</span>
+    </div>
     <div class="term" id="t-orch"></div>
   </section>
 
+  <!-- S6: Eval + live playground clip -->
   <section class="scene clipscene" id="s6">
-    <span class="exhibit-tag">Exhibit P · live on cloud run</span>
-    <div class="scenetitle"><b>04</b> · examined with google's own eval — then try to lie to it yourself</div>
+    <div class="scenebar">
+      <span class="num">04</span>
+      <span class="title">Examined with Google's Own Eval — Then Try to Lie to It Yourself</span>
+      <span class="scene-meta">live on cloud run</span>
+    </div>
     <div class="clipframe"><video id="clip" src="/film/assets/playground-clip.webm" muted preload="auto"></video></div>
   </section>
 
+  <!-- S7: Close -->
   <section class="scene titlecard" id="s7">
-    <div class="doc-rule">
-      <span class="org">Sentinel <em>Mesh</em></span>
-      <span class="no">NEXUS AI LABS · SEOUL</span>
+    <div class="topbar">
+      <div class="brand">
+        <span class="mark">NEXUS</span><span class="prod">Sentinel Mesh</span>
+        <span class="live">● LIVE · verified-memory control plane</span>
+      </div>
+      <span class="challenge">NEXUS AI LABS · SEOUL</span>
     </div>
-    <h1 style="font-size:96px">Verify in the message path.<br>
-      <span class="ital">Remember what survives.</span><br>Get smarter every run.</h1>
+    <h1 style="font-size:88px;margin-top:56px">Verify in the message path.<br>
+      <span class="em">Remember what survives.</span><br>Get smarter every run.</h1>
     <div class="urls">
-      <div>working papers · <b>sentinel.k.nexus</b></div>
-      <div>try to lie to the referee · <b>live playground, linked on the dashboard</b></div>
-      <div>code · <b>github.com/gudax/sentinel-mesh</b></div>
+      <div class="row-url"><span class="lbl">Devpost</span><span class="val">sentinel.k.nexus</span></div>
+      <div class="row-url"><span class="lbl">Playground</span><span class="val">live — try to lie to the referee</span></div>
+      <div class="row-url"><span class="lbl">Source</span><span class="val">github.com/gudax/sentinel-mesh</span></div>
       <div class="dim">recorded run · measured counters · eval: 30 claims × 3 runs · 100% verdict accuracy</div>
     </div>
   </section>
@@ -186,7 +262,10 @@ async function startFilm(){
   };
 
   at(0, () => { $("#preroll").classList.add("off"); show("#s1"); });
-  at(.9, () => $("#coverstamp").classList.add("in"));
+  at(.9, () => {
+    $("#coverstamp").classList.add("in");
+    setTimeout(() => $("#coverstamp2").classList.add("in"), 220);
+  });
   at(S[1], () => show("#s2"));            typeAt(S[1] + .4, "#t-boot", A.boot, len(1) * .75);
   at(S[2], () => show("#s3a"));           typeAt(S[2] + .4, "#t-run1", A.run1, len(2) * .45);
   at(S[2] + len(2) * .55, () => { show("#s3b"); cam("#if1", 1.16, -40, -560); });

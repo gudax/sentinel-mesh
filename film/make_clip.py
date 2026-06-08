@@ -40,9 +40,12 @@ with sync_playwright() as p:
         pg.wait_for_timeout(350)
         pg.click("#go")
         pg.wait_for_function(
-            "document.querySelector('#stamp').textContent.length > 0 && !document.querySelector('#go').disabled",
+            "(()=>{const s=document.querySelector('#stamp');"
+            "return s && /\\b(accept|veto|flag)\\b/.test(s.className) "
+            "&& !document.querySelector('#go').disabled;})()",
             timeout=60000)
-        got = pg.text_content("#stamp").strip()
+        cls = pg.get_attribute("#stamp", "class") or ""
+        got = next((v for v in ("accept", "veto", "flag") if v in cls), cls)
         print(f"{claim[:50]!r} -> {got} (expected {expected})", flush=True)
         assert got == expected, f"clip take broken: {got} != {expected}"
         pg.wait_for_timeout(2600)

@@ -47,7 +47,7 @@ A judge you can't measure is just another opinion. We built a **30-claim eval se
 - **Google ADK eval** (`EvalSet` + `AgentEvaluator`): the referee exposed as an ADK agent tool, scored on exact tool trajectory + response match. **GREEN.**
 - **A deterministic harness** (3 full passes, isolated two-phase ledger): **100% verdict accuracy, 100% consistency, tripwire exactness with zero model calls.**
 
-The eval earned its keep immediately: it caught a real failure mode — a Korean-language *financial statement* ("매출이 크게 성장했다" / revenue grew) was over-vetoed because one lens read a performance *statement* as a money *action*. We tightened the rubric to distinguish the two and re-ran: **96.9% → 100%**. That loop — Google eval tooling finds the flaw, the rubric improves, the numbers prove it — is Track 2's "optimize existing agents" applied to the optimizer itself.
+The eval earned its keep immediately: it caught a real failure mode — a financial *statement* ("revenue grew strongly") was over-vetoed because one lens read a performance *statement* as a money *action* (the tripwire is intentionally multilingual, which is what surfaced the edge case). We tightened the rubric to distinguish the two and re-ran: **96.9% → 100%**. That loop — Google eval tooling finds the flaw, the rubric improves, the numbers prove it — is Track 2's "optimize existing agents" applied to the optimizer itself.
 
 ## How we built it — four Google-stack pieces, all load-bearing
 
@@ -79,5 +79,5 @@ Plus the live layer: **Cloud Run playground** ("try to lie to the referee") runn
 
 ---
 
-**Demo video:** https://youtu.be/SuaALGyKerI · **Working papers (dashboard):** https://sentinel.k.nexus · **Live playground (Cloud Run):** https://sentinel-playground-675241948019.asia-northeast1.run.app · **Repo:** https://github.com/gudax/sentinel-mesh
+**Demo video:** https://youtu.be/NEW_ID  ← REPLACE with the new upload's ID · **Dashboard:** https://sentinel.k.nexus · **Live playground (Cloud Run):** https://sentinel-playground-675241948019.asia-northeast1.run.app · **Repo:** https://github.com/gudax/sentinel-mesh
 *All counters measured, not asserted. The film is a fixture-replayed recorded run; the playground is live.*
