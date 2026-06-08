@@ -1,4 +1,4 @@
-# Devpost Submission — Sentinel Mesh (v2)
+# Devpost Submission — Sentinel Mesh (v3)
 
 **Track 2 — Optimize (Existing Agents)** · Google for Startups AI Agents Challenge
 
@@ -14,7 +14,7 @@ Same ADK/A2A fleet, same three claims, run twice. Nothing changed but memory:
 - Fleet-level Gemini spend drops **9 → 3 lens calls** between runs. Reliability and cost improve together, **with zero retraining**.
 - The referee itself was examined with **Google's own eval tooling**: a 30-claim eval set × 3 runs — **100% verdict accuracy, 100% run-to-run consistency** (ADK `AgentEvaluator` + a deterministic harness; details below).
 
-**Don't take the recording's word for it — [the referee is live on Cloud Run]: type your own lie and watch it get stamped.** (Testing-access link on this page.)
+**Don't take the recording's word for it — the referee is live on Cloud Run: type your own lie and watch it get stamped.** (Testing-access link on this page.)
 
 ## Inspiration
 
