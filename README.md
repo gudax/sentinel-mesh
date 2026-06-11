@@ -4,7 +4,7 @@
 
 > Verify in the message path. Remember what survives. Get smarter every run.
 
-**Demo film:** [youtu.be/qM20NV_Q2oU](https://youtu.be/qM20NV_Q2oU) ·
+**Demo film:** [youtu.be/EoVPFltaW8M](https://youtu.be/EoVPFltaW8M) ·
 **Working papers:** [sentinel.k.nexus](https://sentinel.k.nexus) ·
 **Live playground:** [try to lie to the referee](https://sentinel-playground-675241948019.asia-northeast1.run.app) ·
 **Architecture:** [dashboard/architecture.svg](dashboard/architecture.svg)

@@ -91,5 +91,5 @@ Plus the live layer: **Cloud Run playground** ("try to lie to the referee") runn
 
 ---
 
-**Demo video:** https://youtu.be/qM20NV_Q2oU · **Dashboard:** https://sentinel.k.nexus · **Live playground (Cloud Run):** https://sentinel-playground-675241948019.asia-northeast1.run.app · **Repo:** https://github.com/gudax/sentinel-mesh
+**Demo video:** https://youtu.be/EoVPFltaW8M · **Dashboard:** https://sentinel.k.nexus · **Live playground (Cloud Run):** https://sentinel-playground-675241948019.asia-northeast1.run.app · **Repo:** https://github.com/gudax/sentinel-mesh
 *All counters measured, not asserted. The film is a fixture-replayed recorded run; the playground is live.*

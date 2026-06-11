@@ -110,6 +110,29 @@
   .lowerthird .v .flag-t{color:#b36a00}
   .lowerthird .v .info-t{color:var(--info)}
 
+  /* ── Herd immunity scene ── */
+  .herdscene{display:flex;flex-direction:column;padding:72px 120px;gap:28px}
+  .herd-lede{font-size:26px;line-height:1.5;color:var(--ink-2);max-width:1500px;font-weight:400}
+  .herd-lede b{color:var(--ink);font-weight:600}
+  .herd-cards{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;align-items:stretch}
+  .fcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+    box-shadow:var(--sh-sm);padding:34px 36px;position:relative;display:flex;flex-direction:column;gap:18px;
+    opacity:0;transform:translateY(14px);transition:all .6s}
+  .fcard.show{opacity:1;transform:none}
+  .fcard.immune{border-color:var(--ok-border)}
+  .fcard.infected{border-color:#f0d080}
+  .fcard .fid{font-family:var(--sans);font-weight:800;font-size:30px;letter-spacing:-.01em;color:var(--ink)}
+  .fcard .frole{font-family:var(--mono);font-size:14px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-top:-8px}
+  .fcard .fstamp{position:absolute;top:30px;right:34px}
+  .fcard .fline{font-family:var(--mono);font-size:18px;line-height:1.55;color:var(--ink-2)}
+  .fcard .fline b{color:var(--ink);font-weight:600}
+  .fcard .fline .ok-t{color:var(--ok);font-weight:600}
+  .fcard .fline .no-t{color:var(--no);font-weight:600}
+  .fcard .fline .flag-t{color:#b36a00;font-weight:600}
+  .fcard .passbox{font-family:var(--mono);font-size:14px;color:var(--ink-3);background:var(--surface-sunken);
+    border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;line-height:1.5;margin-top:auto}
+  .fcard .passbox b{color:var(--ok);font-weight:600}
+
   /* ── Clip scene ── */
   .clipscene{display:flex;flex-direction:column;padding:72px 120px;gap:28px}
   .clipframe{flex:1;border:1px solid var(--border);border-radius:var(--r-lg);
@@ -205,7 +228,43 @@
     <div class="clipframe"><video id="clip" src="/film/assets/playground-clip.webm" muted preload="auto"></video></div>
   </section>
 
-  <!-- S7: Close -->
+  <!-- S7: Herd Immunity — verification crosses fleet boundaries -->
+  <section class="scene herdscene" id="s_herd">
+    <div class="scenebar">
+      <span class="num">05</span>
+      <span class="title">Herd Immunity — Verification Crosses Fleet Boundaries</span>
+      <span class="scene-meta">trust passport · 0 new gemini calls</span>
+    </div>
+    <p class="herd-lede">The verified ledger is a file this plane owns — so adjudicated truth is
+      <b>portable</b>. One fleet earns the immunity; a signed <b>Trust Passport</b> hands it to the next.
+      Same lie, three fleets, <b>zero new Gemini calls.</b></p>
+    <div class="herd-cards">
+      <article class="fcard" id="fcA">
+        <div class="fid">Fleet A</div>
+        <div class="frole">issuer · ran the full loop</div>
+        <div class="fline">Verified the FYE fact <b>and</b> the operator's entity-separation correction — then exported:</div>
+        <div class="passbox"><b>✓ TRUST PASSPORT</b> · 2 verified claims · sha256-signed.<br>Editing a verdict breaks the digest before import.</div>
+      </article>
+      <article class="fcard immune" id="fcB">
+        <div class="fstamp"><span class="verdict no big" id="fcBstamp">✕ Blocked</span></div>
+        <div class="fid">Fleet B</div>
+        <div class="frole">imported passport · never ran the panel</div>
+        <div class="fline">re-ask the verified fact → <span class="ok-t">✓ served from memory</span>, <b>0 Gemini calls</b></div>
+        <div class="fline">attack with the unseen lie → <span class="no-t">✕ VETOED</span> — the inherited <b>[VERIFIED]</b> row is now its ground truth. Immunity it never earned.</div>
+        <div class="passbox"><b>↳ immunity inherited via passport</b> — verification it never had to pay for.</div>
+      </article>
+      <article class="fcard infected" id="fcC">
+        <div class="fstamp"><span class="verdict flag big" id="fcCstamp">⚠ Flagged</span></div>
+        <div class="fid">Fleet C</div>
+        <div class="frole">control · no passport</div>
+        <div class="fline">knows the FYE fact, never got the correction.</div>
+        <div class="fline">attack with the <b>same</b> lie → <span class="flag-t">⚠ FLAGGED</span> — suspicious, but it <b>passes.</b> No immunity.</div>
+        <div class="passbox" style="color:#9a7b1a;background:#fff8e6;border-color:#f0d080">↳ missing one passport row — <b style="color:#9a7b1a">the vaccine.</b></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- S8: Close -->
   <section class="scene titlecard" id="s7">
     <div class="topbar">
       <div class="brand">
@@ -275,7 +334,11 @@ async function startFilm(){
   at(S[3] + len(3) * .62, () => cam("#if2", 1.3, -120, -260));
   at(S[4], () => show("#s5"));            typeAt(S[4] + .4, "#t-orch", A.orch, len(4) * .75);
   at(S[5], () => { show("#s6"); const v = $("#clip"); v.currentTime = 0; v.play(); });
-  at(S[6], () => show("#s7"));
+  at(S[6], () => show("#s_herd"));
+  at(S[6] + .4,  () => $("#fcA").classList.add("show"));
+  at(S[6] + 1.6, () => { $("#fcB").classList.add("show"); $("#fcBstamp").classList.add("in"); });
+  at(S[6] + 2.9, () => { $("#fcC").classList.add("show"); $("#fcCstamp").classList.add("in"); });
+  at(S[7], () => show("#s7"));
   at(T.total + 1.2, () => { document.title = "FILM-DONE"; });
 
   const t0 = performance.now();
