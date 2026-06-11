@@ -408,14 +408,14 @@ fetch("./herd.json").then(r => r.ok ? r.json() : null).then(H => {
   document.getElementById("herd-lede").innerHTML =
     `The verified ledger is a file this plane owns, so the most expensive thing a fleet produces — <b>adjudicated truth</b> — is portable.
      One fleet earns the immunity; a signed <b>Trust Passport</b> hands it to the next. Same lie, three fleets,
-     <b>zero new Gemini calls</b>: <span class="claim-text" style="font-size:14px">${H.lie}</span>`;
+     <b>zero network calls</b> (offline replay): <span class="claim-text" style="font-size:14px">${H.lie}</span>`;
   const b = H.fleet_b, c = H.fleet_c;
   document.getElementById("herd-grid").innerHTML = `
     <article class="fleet">
       <div class="fh"><span class="id">Fleet A</span><span class="role">issuer · ran the full loop</span></div>
       <div class="line"><span class="lbl">verified the FYE fact + the operator's entity-separation correction, then exported:</span></div>
       <div class="passport"><b>✓ TRUST PASSPORT</b> · ${H.passport.claim_count} claims · sha256 ${H.passport.digest.slice(0,16)}…<br>
-        tamper-evident: editing a verdict breaks the digest before import.</div>
+        HMAC-signed: a forged verdict fails the signature check, not just a digest.</div>
     </article>
     <article class="fleet immune">
       <div class="fstamp">${stamp("veto")}</div>
@@ -424,7 +424,8 @@ fetch("./herd.json").then(r => r.ok ? r.json() : null).then(H => {
         <b>${b.reserve_verified_fact.lens_calls} Gemini calls</b> · ${b.reserve_verified_fact.elapsed_ms} ms
         <span class="lbl">(cross-fleet zero-cost reserve)</span></div>
       <div class="line"><span class="lbl">attack with the unseen lie →</span> ${vlabel(b.veto_unseen_lie.verdict)}
-        <span class="lbl">— the inherited <b>[VERIFIED]</b> row is now its ground truth. Immunity it never earned.</span></div>
+        <b>${b.veto_unseen_lie.lens_calls} lens calls</b>
+        <span class="lbl">— the panel does run, but its verdict rests on the inherited <b>[VERIFIED]</b> row Fleet B never paid to earn.</span></div>
     </article>
     <article class="fleet infected">
       <div class="fstamp">${stamp("flag")}</div>
@@ -436,7 +437,7 @@ fetch("./herd.json").then(r => r.ok ? r.json() : null).then(H => {
   document.getElementById("herd-foot").innerHTML =
     `The only difference between the fleet that blocks the lie and the one it infects is <b>one row in a passport</b>.
      That row is the <span class="vaccine">vaccine</span>. Verification compounds <b>within</b> a fleet across runs — and now
-     <b>across</b> fleets at zero marginal model cost: the opposite of a per-call guardrail, which re-pays for the same
+     <b>across</b> fleets: a verified set transfers at zero marginal model cost, and inherited facts re-serve at zero calls — the opposite of a per-call guardrail, which re-pays for the same
      judgement on every agent, every fleet, forever. Reproduce offline: <b>SENTINEL_REPLAY=1 python demo_herd.py</b>`;
 });
 

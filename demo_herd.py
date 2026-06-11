@@ -90,7 +90,7 @@ def run():
         "lie": LIE,
         "verified_fact": FYE,
         "passport": {"issuer": ppt["issuer"], "claim_count": ppt["claim_count"],
-                     "digest": ppt["digest"],
+                     "digest": ppt["digest"], "sig": ppt["sig"],
                      "claims": [{"claim_text": c["claim_text"], "verdict": c["verdict"],
                                  "confidence": c["confidence"]} for c in ppt["claims"]]},
         "fleet_b": {"imported_hashes": imported,

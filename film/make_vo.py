@@ -54,9 +54,11 @@ SEGMENTS = [
     "live on Cloud Run — type your own lie, and watch it get stamped.",
     # S7 — herd immunity (cross-fleet trust passport)
     "But verification doesn't have to stop at one fleet. The verified ledger is "
-    "portable. One fleet exports a signed Trust Passport — and a second fleet, "
-    "which never ran the panel, inherits the immunity. It vetoes a lie it has "
-    "never seen, and re-serves a verified fact at zero Gemini calls. A control "
+    "portable. One fleet exports an H-MAC signed Trust Passport — and a second "
+    "fleet, which never verified it itself, inherits the immunity. It re-serves "
+    "that fact at zero Gemini calls, and vetoes a lie it has never seen — the "
+    "panel still runs, but the verdict rests on a correction it never paid to "
+    "earn. A control "
     "fleet without the passport only flags the same lie. One fleet earns the "
     "immunity; every fleet inherits it.",
     # S8 — close

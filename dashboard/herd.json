@@ -5,6 +5,7 @@
   "issuer": "sentinel-mesh:fleet-A",
   "claim_count": 2,
   "digest": "c62dd0cd9859127c980347b4787e57bed8258c6205e174befe6aefedea052eb2",
+  "sig": "9f3117556a38b7cef751c6c22e0f58a3dd7fedd52d512278b9a8961c67344e56",
   "claims": [
    {
     "claim_text": "Meridian Dynamics' financial year end is 31 December.",
@@ -42,7 +43,7 @@
    "verdict": "veto",
    "confidence": 0.2,
    "lens_calls": 3,
-   "elapsed_ms": 0.6,
+   "elapsed_ms": 0.7,
    "provenance": {
     "grounded_on_snapshot": 4,
     "verified_in_snapshot": 2
@@ -55,7 +56,7 @@
    "verdict": "flag",
    "confidence": 0.6,
    "lens_calls": 3,
-   "elapsed_ms": 1.0,
+   "elapsed_ms": 0.4,
    "provenance": {
     "grounded_on_snapshot": 3,
     "verified_in_snapshot": 1
