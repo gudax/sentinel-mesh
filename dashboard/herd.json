@@ -1,0 +1,71 @@
+{
+ "lie": "Meridian Dynamics and Atlas Cognition Labs are related parties under common ownership.",
+ "verified_fact": "Meridian Dynamics' financial year end is 31 December.",
+ "passport": {
+  "issuer": "sentinel-mesh:fleet-A",
+  "claim_count": 2,
+  "digest": "c62dd0cd9859127c980347b4787e57bed8258c6205e174befe6aefedea052eb2",
+  "claims": [
+   {
+    "claim_text": "Meridian Dynamics' financial year end is 31 December.",
+    "verdict": "accept",
+    "confidence": 1.0
+   },
+   {
+    "claim_text": "Meridian Dynamics and Atlas Cognition Labs are SEPARATE, unrelated companies with zero cross-shareholding and no family tie.",
+    "verdict": "accept",
+    "confidence": 1.0
+   }
+  ]
+ },
+ "fleet_b": {
+  "imported_hashes": [
+   "4ebed039c08ac478",
+   "90e2bdc9f86f0c89"
+  ],
+  "reserve_verified_fact": {
+   "source": "memory",
+   "verdict": "accept",
+   "confidence": 1.0,
+   "lens_calls": 0,
+   "elapsed_ms": 0.1,
+   "provenance": {
+    "claim_hash": "4ebed039c08ac478",
+    "evidence_ref": "referee panel vs memory snapshot",
+    "chain": [
+     "4ebed039c08ac478"
+    ]
+   }
+  },
+  "veto_unseen_lie": {
+   "source": "referee",
+   "verdict": "veto",
+   "confidence": 0.2,
+   "lens_calls": 3,
+   "elapsed_ms": 0.6,
+   "provenance": {
+    "grounded_on_snapshot": 4,
+    "verified_in_snapshot": 2
+   }
+  }
+ },
+ "fleet_c": {
+  "flag_same_lie": {
+   "source": "referee",
+   "verdict": "flag",
+   "confidence": 0.6,
+   "lens_calls": 3,
+   "elapsed_ms": 1.0,
+   "provenance": {
+    "grounded_on_snapshot": 3,
+    "verified_in_snapshot": 1
+   }
+  }
+ },
+ "headline": {
+  "cross_fleet_reserve_lens_calls": 0,
+  "b_verdict_on_unseen_lie": "veto",
+  "c_verdict_on_same_lie": "flag",
+  "immunity_transferred": true
+ }
+}

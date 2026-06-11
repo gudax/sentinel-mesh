@@ -158,6 +158,37 @@
   .exam .story{font-size:14px;line-height:1.6;color:var(--ink-2);max-width:78ch;padding:14px 2px 0}
   .exam .story b{color:var(--ink);font-weight:600}
 
+  /* ── herd immunity (cross-fleet passport) ───────────────────────────── */
+  .herd{margin-top:60px;display:none}
+  .herd.on{display:block}
+  .herd .cap{display:flex;align-items:baseline;gap:14px;padding:0 0 6px;flex-wrap:wrap}
+  .herd .cap .t{font-weight:700;font-size:22px;letter-spacing:-.01em;color:var(--ink)}
+  .herd .cap .m{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .herd-lede{font-size:14px;line-height:1.6;color:var(--ink-2);max-width:80ch;padding:0 0 18px}
+  .herd-lede b{color:var(--ink);font-weight:600}
+  .herd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .fleet{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+    box-shadow:var(--sh-sm);padding:18px 20px;position:relative}
+  .fleet.immune{border-color:var(--ok-border)}
+  .fleet.infected{border-color:#f0cdba}
+  .fleet .fh{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--border);padding-bottom:12px;flex-wrap:wrap}
+  .fleet .fh .id{font-family:var(--sans);font-weight:800;font-size:17px;letter-spacing:-.01em;white-space:nowrap}
+  .fleet .fh .role{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em}
+  .fleet.immune .fstamp,.fleet.infected .fstamp{top:14px}
+  .fleet .fstamp{position:absolute;top:16px;right:18px}
+  .fleet .line{font-family:var(--mono);font-size:12px;color:var(--ink-2);padding:12px 0 0;line-height:1.55}
+  .fleet .line .lbl{color:var(--ink-3)}
+  .fleet .line b{color:var(--ink);font-weight:600}
+  .fleet .verd{font-weight:600}
+  .fleet .verd.accept{color:var(--ok)} .fleet .verd.veto{color:var(--no)} .fleet .verd.flag{color:var(--accent-ink)}
+  .fleet .passport{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);
+    background:var(--surface-sunken);border:1px solid var(--border);border-radius:var(--r-sm);
+    padding:8px 10px;margin-top:12px;line-height:1.5;word-break:break-all}
+  .fleet .passport b{color:var(--ok);font-weight:600}
+  .herd-foot{font-size:14px;line-height:1.6;color:var(--ink-2);max-width:82ch;padding:18px 2px 0}
+  .herd-foot b{color:var(--ink);font-weight:600}
+  .herd-foot .vaccine{color:var(--ok);font-weight:600}
+
   /* playground CTA */
   .cta{margin-top:48px;display:none}
   .cta.on{display:block}
@@ -232,6 +263,13 @@
     <div class="grid" id="exam-grid"></div>
     <div class="story" id="exam-story"></div>
     <div class="footline" id="exam-foot"></div>
+  </section>
+
+  <section class="herd" id="herd">
+    <div class="cap"><span class="t">Herd Immunity — verification crosses fleet boundaries</span><span class="m" id="herd-meta"></span></div>
+    <p class="herd-lede" id="herd-lede"></p>
+    <div class="herd-grid" id="herd-grid"></div>
+    <div class="herd-foot" id="herd-foot"></div>
   </section>
 
   <section class="cta" id="cta">
@@ -358,6 +396,48 @@ fetch("./eval.json").then(r => r.ok ? r.json() : null).then(E => {
     `Examined with <b>Google ADK eval (EvalSet · AgentEvaluator)</b> and a deterministic harness over the same claims —
      verified / flagged / blocked across paraphrase, advisory-contradiction, verified-contradiction and tripwire edges.
      Reproducible offline: <b>SENTINEL_REPLAY=1 python eval/run_eval.py</b>`;
+});
+
+/* herd immunity — verification crosses fleet boundaries via a Trust Passport */
+fetch("./herd.json").then(r => r.ok ? r.json() : null).then(H => {
+  if (!H) return;
+  document.getElementById("herd").classList.add("on");
+  const vlabel = v => `<span class="verd ${v}">${VERDICT_LABEL[v]||v}</span>`;
+  document.getElementById("herd-meta").textContent =
+    `passport ${H.passport.issuer} · ${H.passport.claim_count} verified claims · digest ${H.passport.digest.slice(0,12)}…`;
+  document.getElementById("herd-lede").innerHTML =
+    `The verified ledger is a file this plane owns, so the most expensive thing a fleet produces — <b>adjudicated truth</b> — is portable.
+     One fleet earns the immunity; a signed <b>Trust Passport</b> hands it to the next. Same lie, three fleets,
+     <b>zero new Gemini calls</b>: <span class="claim-text" style="font-size:14px">${H.lie}</span>`;
+  const b = H.fleet_b, c = H.fleet_c;
+  document.getElementById("herd-grid").innerHTML = `
+    <article class="fleet">
+      <div class="fh"><span class="id">Fleet A</span><span class="role">issuer · ran the full loop</span></div>
+      <div class="line"><span class="lbl">verified the FYE fact + the operator's entity-separation correction, then exported:</span></div>
+      <div class="passport"><b>✓ TRUST PASSPORT</b> · ${H.passport.claim_count} claims · sha256 ${H.passport.digest.slice(0,16)}…<br>
+        tamper-evident: editing a verdict breaks the digest before import.</div>
+    </article>
+    <article class="fleet immune">
+      <div class="fstamp">${stamp("veto")}</div>
+      <div class="fh"><span class="id">Fleet B</span><span class="role">imported passport · never ran the panel</span></div>
+      <div class="line"><span class="lbl">re-ask the verified fact →</span> ${vlabel(b.reserve_verified_fact.verdict)}
+        <b>${b.reserve_verified_fact.lens_calls} Gemini calls</b> · ${b.reserve_verified_fact.elapsed_ms} ms
+        <span class="lbl">(cross-fleet zero-cost reserve)</span></div>
+      <div class="line"><span class="lbl">attack with the unseen lie →</span> ${vlabel(b.veto_unseen_lie.verdict)}
+        <span class="lbl">— the inherited <b>[VERIFIED]</b> row is now its ground truth. Immunity it never earned.</span></div>
+    </article>
+    <article class="fleet infected">
+      <div class="fstamp">${stamp("flag")}</div>
+      <div class="fh"><span class="id">Fleet C</span><span class="role">control · no passport</span></div>
+      <div class="line"><span class="lbl">knows the FYE fact, never got the correction.</span></div>
+      <div class="line"><span class="lbl">attack with the SAME lie →</span> ${vlabel(c.flag_same_lie.verdict)}
+        <span class="lbl">— suspicious, but it <b>passes</b>. No immunity.</span></div>
+    </article>`;
+  document.getElementById("herd-foot").innerHTML =
+    `The only difference between the fleet that blocks the lie and the one it infects is <b>one row in a passport</b>.
+     That row is the <span class="vaccine">vaccine</span>. Verification compounds <b>within</b> a fleet across runs — and now
+     <b>across</b> fleets at zero marginal model cost: the opposite of a per-call guardrail, which re-pays for the same
+     judgement on every agent, every fleet, forever. Reproduce offline: <b>SENTINEL_REPLAY=1 python demo_herd.py</b>`;
 });
 
 if (PLAYGROUND_URL) {

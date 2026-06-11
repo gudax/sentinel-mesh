@@ -4,7 +4,7 @@
 
 > Verify in the message path. Remember what survives. Get smarter every run.
 
-**Demo film:** [youtu.be/SuaALGyKerI](https://youtu.be/SuaALGyKerI) ·
+**Demo film:** [youtu.be/qM20NV_Q2oU](https://youtu.be/qM20NV_Q2oU) ·
 **Working papers:** [sentinel.k.nexus](https://sentinel.k.nexus) ·
 **Live playground:** [try to lie to the referee](https://sentinel-playground-675241948019.asia-northeast1.run.app) ·
 **Architecture:** [dashboard/architecture.svg](dashboard/architecture.svg)
@@ -21,6 +21,14 @@ strictly cleaner memory.
 fleet compounds truth every run. A claim FLAGGED and corrected on Run 1 is
 auto-VETOED on Run 2; a claim already verified is served from memory with **zero
 Gemini calls**.
+
+**Herd Immunity:** the verified ledger is a file this plane owns — so immunity is
+*portable*. A fleet exports a tamper-evident **Trust Passport** of what it verified;
+a second fleet imports it and **vetoes a lie it has never seen** (the inherited
+`[VERIFIED]` row is now its ground truth) while re-serving the verified fact at
+**0 Gemini calls**. A control fleet without the passport only FLAGs the same lie —
+it passes. One fleet earns the immunity; every fleet inherits it, at zero marginal
+model cost. See `demo_herd.py` (`passport.py` for the export/verify/import).
 
 ```
  Worker A (ADK/A2A :8001) ──┐                       ┌─ 3-lens Gemini referee
@@ -43,6 +51,9 @@ export SENTINEL_MEMORY_DB=$PWD/demo_data/demo_memory.db
 
 # the closed loop, end to end (referee + ledger + two-run demo)
 SENTINEL_REPLAY=1 python demo.py                          # deterministic, offline
+
+# Herd Immunity — verification crosses fleet boundaries (Trust Passport)
+SENTINEL_REPLAY=1 python demo_herd.py                     # 3 fleets, 1 lie, 0 new Gemini calls
 # or live:  SENTINEL_VERTEX=1 GOOGLE_CLOUD_PROJECT=<proj> \
 #           GOOGLE_APPLICATION_CREDENTIALS=<sa.json> SENTINEL_RECORD=1 python demo.py
 
@@ -80,6 +91,8 @@ Linked from the dashboard at [sentinel.k.nexus](https://sentinel.k.nexus).
 | `memory.py` | Verified-claim ledger (`sentinel.db`, its own file — broker refresh jobs can never clobber rulings) + read-only advisory ground-truth reads from any SQLite with a `memories` table. |
 | `plane.py` | The closed-loop seam: memory-first `intercept()` (verified claims cost 0 model calls) + gated `correct()` (even corrections must pass the referee). |
 | `demo.py` | The filmable two-run sequence with honest, measured counters. |
+| `passport.py` | **Trust Passport**: export verified ledger rows as a tamper-evident bundle (sha256 over verdict-bearing fields), `verify_passport()`, and `import_passport()` into another fleet's ledger — verification made portable. |
+| `demo_herd.py` | **Herd Immunity** demo: Fleet A exports a passport; Fleet B inherits it and vetoes an unseen lie at 0 re-judging cost; control Fleet C (no passport) only FLAGs the same lie. Deterministic, offline, zero new Gemini calls. |
 | `fleet/` | Real ADK agents over the A2A protocol (`to_a2a`, `RemoteA2aAgent`) with the sentinel bound to the non-experimental `before_tool_callback`. |
 | `eval/` | The referee examined: a 30-claim expected-verdict set (paraphrase, advisory-contradiction, verified-contradiction, tripwire word-boundary edges) scored by a deterministic harness **and** Google ADK eval (`EvalSet` + `AgentEvaluator`). Live Vertex result: **100% verdict accuracy × 3 runs, 100% consistency** — after the eval itself caught a rubric ambiguity (96.9% → fix → 100%). |
 | `playground/` | "Try to lie to the referee" — FastAPI service on Cloud Run running the real referee against read-only demo memory + an ephemeral per-session verified ledger. Rate-limited; nothing persisted. |

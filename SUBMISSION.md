@@ -1,4 +1,4 @@
-# Devpost Submission — Sentinel Mesh (v3)
+# Devpost Submission — Sentinel Mesh
 
 **Track 2 — Optimize (Existing Agents)** · Google for Startups AI Agents Challenge
 
@@ -29,6 +29,18 @@ Sentinel Mesh is a control plane that sits **in the message path** of a Google A
 3. Accepted claims are **written back** into a provenance-tracked verified ledger — every ruling drills down to the row and source that justified it.
 
 The write-back closes the loop: **the referee guards memory; memory grounds the referee; the fleet compounds truth every run.** The verdict rubric encodes a trust hierarchy — *advisory* memory caps suspicion at FLAG; only *verified* ledger rows justify a VETO; paraphrase is never contradiction.
+
+## Verification is portable — Herd Immunity across fleets
+
+The verified ledger is a file this control plane owns. That makes the most expensive thing a fleet produces — *adjudicated truth* — **portable**. A fleet that has paid the Gemini cost to verify a fact can hand a second fleet a **Trust Passport**: a tamper-evident export (sha256 over the verdict-bearing fields, so a passport edited to upgrade a FLAG into a verified ACCEPT fails verification before it can poison the importer). One fleet earns the immunity; every fleet inherits it.
+
+We demo it with three fleets and one lie — *"Meridian and Atlas are related parties under common ownership"* (`demo_herd.py`, deterministic offline replay, **zero new Gemini calls**):
+
+- **Fleet A** runs the full loop, accepts the operator's entity-separation correction, and exports a 2-claim Trust Passport.
+- **Fleet B** imports the passport and has **never run the panel on anything**. It re-serves the verified fact at **0 Gemini calls / 0.1 ms** (cross-fleet zero-cost reserve) — and **VETOES the lie it has never seen**, because the inherited `[VERIFIED]` correction is now its ground truth.
+- **Fleet C** is the control: it verified the same FYE fact but never received the correction. The **same lie only reaches FLAG** — suspicious, but it passes.
+
+The only difference between a fleet that blocks the lie and one that gets infected by it is **one row in a passport**. That row is the vaccine. This is the unit economics argument made literal: verification compounds *within* a fleet across runs, and now *across* fleets at zero marginal model cost — the opposite of every per-call guardrail, which re-pays for the same judgement on every agent, every fleet, forever.
 
 ## Business case
 
@@ -79,5 +91,5 @@ Plus the live layer: **Cloud Run playground** ("try to lie to the referee") runn
 
 ---
 
-**Demo video:** https://youtu.be/NEW_ID  ← REPLACE with the new upload's ID · **Dashboard:** https://sentinel.k.nexus · **Live playground (Cloud Run):** https://sentinel-playground-675241948019.asia-northeast1.run.app · **Repo:** https://github.com/gudax/sentinel-mesh
+**Demo video:** https://youtu.be/qM20NV_Q2oU · **Dashboard:** https://sentinel.k.nexus · **Live playground (Cloud Run):** https://sentinel-playground-675241948019.asia-northeast1.run.app · **Repo:** https://github.com/gudax/sentinel-mesh
 *All counters measured, not asserted. The film is a fixture-replayed recorded run; the playground is live.*
